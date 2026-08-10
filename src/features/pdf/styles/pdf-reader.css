@@ -1,0 +1,746 @@
+/* PDF reader canvas, text and selection layers. */
+.pdf-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-x: auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-color: #aeb8c2 transparent;
+  scrollbar-width: thin;
+  scrollbar-gutter: stable;
+  padding: 28px 24px;
+}
+
+.pdf-scroll.vertical-scroll-locked {
+  overflow-y: hidden;
+}
+
+.pdf-scroll.interaction-pan,
+.pdf-scroll.interaction-pan .pdf-paper,
+.pdf-scroll.interaction-pan .textLayer span {
+  cursor: default;
+}
+
+.pdf-scroll.interaction-pan.gesture-active,
+.pdf-scroll.interaction-pan.gesture-active .pdf-paper,
+.pdf-scroll.interaction-pan.gesture-active .textLayer span {
+  cursor: grabbing;
+}
+
+.pdf-scroll.interaction-pan .textLayer span,
+.pdf-scroll.interaction-eraser .textLayer span {
+  user-select: none;
+}
+
+.pdf-scroll.interaction-eraser,
+.pdf-scroll.interaction-eraser .pdf-paper,
+.pdf-scroll.interaction-eraser .pdf-paper * {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Cpath d='M5.5 20.5 16 10a2 2 0 0 1 2.8 0l4.2 4.2a2 2 0 0 1 0 2.8l-7 7H9.2z' fill='white' stroke='%23176749' stroke-width='2' stroke-linejoin='round'/%3E%3Cpath d='m14.5 11.5 7 7' fill='none' stroke='%23176749' stroke-width='2'/%3E%3Cpath d='M4 25h20' fill='none' stroke='%235d6873' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") 5 23, cell;
+}
+
+.pdf-scroll.interaction-markup .pdf-paper,
+.pdf-scroll.interaction-markup .pdf-paper * {
+  cursor: var(--pdf-markup-cursor), text;
+}
+
+.pdf-scroll.interaction-area .pdf-paper,
+.pdf-scroll.interaction-area .pdf-paper * {
+  cursor: crosshair;
+  user-select: none;
+}
+
+.pdf-scroll::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+.pdf-scroll:hover::-webkit-scrollbar,
+.pdf-scroll:focus-within::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
+}
+
+.pdf-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.pdf-scroll::-webkit-scrollbar-thumb {
+  min-width: 36px;
+  min-height: 36px;
+  border-radius: 999px;
+  background: #aeb8c2;
+}
+
+.pdf-scroll:hover::-webkit-scrollbar-thumb,
+.pdf-scroll:focus-within::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  background: #7e8b98;
+  background-clip: padding-box;
+}
+
+.pdf-scroll::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+.pdf-page {
+  position: relative;
+  margin: 0 auto 14px;
+}
+
+.pdf-paper {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #d8dde4;
+  box-shadow: 0 8px 28px rgb(20 31 43 / 12%);
+  background: #ffffff;
+}
+
+.pdf-page.search-hit .pdf-paper {
+  outline: 3px solid #1f7a5a;
+}
+
+.pdf-page canvas,
+.pdf-page-image {
+  display: block;
+}
+
+.pdf-page-image {
+  width: 100%;
+  height: 100%;
+  user-select: none;
+  pointer-events: none;
+}
+
+.pdf-page-loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #78838e;
+  font-size: 13px;
+}
+
+.mupdf-text-span {
+  line-height: 1;
+}
+
+.page-number {
+  width: 100%;
+  padding-top: 10px;
+  color: #66717f;
+  font-size: 13px;
+  line-height: 18px;
+  text-align: center;
+  user-select: none;
+}
+
+.textLayer {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  overflow: clip;
+}
+
+.textLayer span {
+  position: absolute;
+  color: transparent;
+  white-space: pre;
+  cursor: text;
+  user-select: text;
+}
+
+.textLayer ::selection {
+  color: transparent;
+  background: transparent;
+}
+
+.pdf-link-layer {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  pointer-events: none;
+}
+
+.pdf-link-hotspot {
+  position: absolute;
+  min-width: 4px;
+  min-height: 4px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  background: transparent;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.pdf-link-hotspot:hover,
+.pdf-link-hotspot:focus-visible {
+  border-color: rgb(38 118 90 / 58%);
+  outline: 2px solid rgb(38 118 90 / 14%);
+  background: rgb(38 118 90 / 9%);
+}
+
+.pdf-link-hotspot.blocked {
+  cursor: not-allowed;
+}
+
+.pdf-link-hotspot.blocked:hover {
+  border-color: rgb(180 35 24 / 48%);
+  outline-color: rgb(180 35 24 / 10%);
+  background: rgb(180 35 24 / 7%);
+}
+
+.active-selection-layer {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.active-selection-layer span {
+  position: absolute;
+  border-radius: 2px;
+  background: rgb(45 132 255 / 28%);
+  box-shadow: inset 0 0 0 0.5px rgb(45 132 255 / 10%);
+}
+
+.pdf-search-layer {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.pdf-search-layer span {
+  position: absolute;
+  border-radius: 2px;
+  background: rgb(245 183 38 / 34%);
+  box-shadow: inset 0 0 0 1px rgb(192 125 10 / 18%);
+}
+
+.pdf-search-layer span.active {
+  background: rgb(255 154 24 / 55%);
+  box-shadow: 0 0 0 2px rgb(217 112 5 / 72%);
+}
+
+.pdf-link-destination-layer {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.pdf-link-destination-highlight {
+  position: absolute;
+  box-sizing: border-box;
+  border: 2px solid #26765a;
+  border-radius: 3px;
+  background: rgb(38 118 90 / 14%);
+  box-shadow: 0 0 0 2px rgb(38 118 90 / 9%);
+  animation: pdf-link-destination-in 180ms ease-out;
+}
+
+@keyframes pdf-link-destination-in {
+  from { opacity: 0; transform: scale(.985); }
+}
+
+
+.annotation-geometry-layer {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.annotation-mark {
+  position: absolute;
+  color: #26765a;
+}
+
+.annotation-selection-outline {
+  position: absolute;
+  box-sizing: border-box;
+  border: 2px dashed color-mix(in srgb, currentColor 68%, transparent);
+  border-radius: 3px;
+  outline: 2px solid color-mix(in srgb, currentColor 7%, transparent);
+  outline-offset: 1px;
+}
+
+.annotation-mark::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  color: inherit;
+}
+
+.annotation-underline::after {
+  bottom: max(1.5px, calc(3px * var(--annotation-visual-scale, 1)));
+  border-bottom: max(1.5px, calc(3px * var(--annotation-visual-scale, 1))) solid currentColor;
+}
+
+.annotation-strikeout::after {
+  top: 50%;
+  height: max(1.5px, calc(3px * var(--annotation-visual-scale, 1)));
+  background: currentColor;
+  transform: translateY(-50%);
+}
+
+.annotation-squiggly::after {
+  height: max(3px, calc(6px * var(--annotation-visual-scale, 1)));
+  bottom: max(1px, calc(2px * var(--annotation-visual-scale, 1)));
+  background-color: currentColor;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='6' viewBox='0 0 20 6'%3E%3Cpath d='M0 3 C2.5 .7 7.5 .7 10 3 S17.5 5.3 20 3' fill='none' stroke='white' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E");
+  -webkit-mask-position: left bottom;
+  -webkit-mask-repeat: repeat-x;
+  -webkit-mask-size: calc(20px * var(--annotation-visual-scale, 1)) max(3px, calc(6px * var(--annotation-visual-scale, 1)));
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='6' viewBox='0 0 20 6'%3E%3Cpath d='M0 3 C2.5 .7 7.5 .7 10 3 S17.5 5.3 20 3' fill='none' stroke='white' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E");
+  mask-position: left bottom;
+  mask-repeat: repeat-x;
+  mask-size: calc(20px * var(--annotation-visual-scale, 1)) max(3px, calc(6px * var(--annotation-visual-scale, 1)));
+}
+
+.annotation-highlight {
+  background: color-mix(in srgb, currentColor 28%, transparent);
+}
+
+.text-annotation-resize-layer {
+  position: absolute;
+  z-index: 7;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.text-annotation-resize-handle {
+  position: absolute;
+  width: 12px;
+  min-width: 12px;
+  min-height: 14px;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #26765a;
+  cursor: ew-resize;
+  transform: translateX(-50%);
+  pointer-events: auto;
+  touch-action: none;
+}
+
+.text-annotation-resize-handle::after {
+  content: "";
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  left: 50%;
+  width: 3px;
+  border-radius: 3px;
+  background: currentColor;
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 78%), 0 1px 3px rgb(24 38 33 / 28%);
+  transform: translateX(-50%);
+}
+
+.text-annotation-resize-layer.highlight-handles .text-annotation-resize-handle::after {
+  opacity: .62;
+}
+
+.pdf-scroll.text-annotation-resize-active,
+.pdf-scroll.text-annotation-resize-active .pdf-paper,
+.pdf-scroll.text-annotation-resize-active .text-annotation-resize-handle {
+  cursor: ew-resize;
+  user-select: none;
+}
+
+.annotation-area {
+  position: absolute;
+  box-sizing: border-box;
+}
+
+.annotation-area.selected {
+  outline: 2px solid color-mix(in srgb, currentColor 30%, transparent);
+  outline-offset: 2px;
+}
+
+.area-drawing-layer,
+.area-transform-layer {
+  position: absolute;
+  z-index: 6;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.area-drawing-layer > span {
+  position: absolute;
+  box-sizing: border-box;
+  border: 2px dashed #26765a;
+  border-radius: 4px;
+  background: rgb(38 118 90 / 12%);
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 70%);
+}
+
+.area-transform-layer { pointer-events: none; }
+.area-transform-box {
+  position: absolute;
+  box-sizing: border-box;
+  border: 1px dashed #26765a;
+  outline: 2px solid rgb(38 118 90 / 12%);
+  outline-offset: 2px;
+  cursor: grab;
+  pointer-events: auto;
+}
+
+.area-resize-handle {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border: 1px solid #ffffff;
+  border-radius: 2px;
+  background: #26765a;
+  box-shadow: 0 0 0 1px rgb(22 79 58 / 40%);
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+}
+.area-resize-handle.handle-nw { left: 0; top: 0; cursor: nwse-resize; }
+.area-resize-handle.handle-n { left: 50%; top: 0; cursor: ns-resize; }
+.area-resize-handle.handle-ne { left: 100%; top: 0; cursor: nesw-resize; }
+.area-resize-handle.handle-e { left: 100%; top: 50%; cursor: ew-resize; }
+.area-resize-handle.handle-se { left: 100%; top: 100%; cursor: nwse-resize; }
+.area-resize-handle.handle-s { left: 50%; top: 100%; cursor: ns-resize; }
+.area-resize-handle.handle-sw { left: 0; top: 100%; cursor: nesw-resize; }
+.area-resize-handle.handle-w { left: 0; top: 50%; cursor: ew-resize; }
+
+.pdf-scroll.area-transform-drag-active,
+.pdf-scroll.area-transform-drag-active .pdf-paper,
+.pdf-scroll.area-transform-drag-active .area-transform-box {
+  cursor: grabbing;
+  user-select: none;
+}
+
+.annotation-mark.selected::after {
+  filter: drop-shadow(0 0 2px currentColor) drop-shadow(0 0 1px #ffffff);
+}
+
+.annotation-note-marker {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgb(255 255 255 / 90%);
+  border-radius: 4px 4px 4px 1px;
+  color: #ffffff;
+  transform: translate(-55%, -75%);
+  box-shadow: 0 2px 5px rgb(20 30 40 / 24%);
+}
+
+.annotation-note-marker.selected {
+  outline: 2px solid rgb(255 255 255 / 90%);
+  box-shadow: 0 0 0 3px rgb(38 118 90 / 35%);
+}
+
+.pdf-bookmark-marker {
+  position: absolute;
+  z-index: 5;
+  width: 24px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgb(255 255 255 / 86%);
+  border-radius: 5px;
+  color: #ffffff;
+  background: #1f7a5a;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 2px 7px rgb(21 54 42 / 28%);
+  cursor: pointer;
+}
+
+.pdf-bookmark-marker:hover {
+  filter: brightness(.9);
+  transform: translate(-50%, -50%) scale(1.06);
+}
+
+.pdf-scroll.bookmark-move-active .pdf-bookmark-marker.bookmark-moving {
+  outline: 2px solid rgb(38 118 90 / 24%);
+  outline-offset: 2px;
+  cursor: grab;
+}
+
+.pdf-scroll.bookmark-drag-active,
+.pdf-scroll.bookmark-drag-active .pdf-paper,
+.pdf-scroll.bookmark-drag-active .pdf-bookmark-marker {
+  cursor: grabbing;
+  user-select: none;
+}
+
+.pdf-scroll.bookmark-drag-active .pdf-bookmark-marker {
+  transition: none;
+  box-shadow: 0 5px 14px rgb(21 54 42 / 38%);
+}
+
+.selection-context-menu {
+  position: fixed;
+  z-index: 1000;
+  min-width: 154px;
+  padding: 5px;
+  border: 1px solid #d5dbe1;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 10px 28px rgb(23 34 45 / 20%);
+  animation: context-menu-in 120ms ease-out;
+  max-width: calc(100vw - 16px);
+  max-height: calc(100vh - 16px);
+  overflow: auto;
+}
+
+.selection-context-menu > button {
+  width: 100%;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: #26323d;
+  text-align: left;
+}
+
+.selection-context-menu > button:hover {
+  color: #155e44;
+  background: #edf5f1;
+}
+
+.selection-context-menu > button.danger {
+  color: #b42318;
+}
+
+.bookmark-context-menu {
+  width: 220px;
+}
+
+.bookmark-name-field {
+  display: grid;
+  gap: 5px;
+  padding: 6px;
+  color: #697680;
+  font-size: 11px;
+}
+
+.bookmark-name-field input {
+  min-width: 0;
+  height: 32px;
+  padding: 0 9px;
+  border: 1px solid #d5dbe1;
+  border-radius: 5px;
+  color: inherit;
+  background: transparent;
+  outline: none;
+}
+
+.bookmark-name-field input:focus {
+  border-color: #26765a;
+  box-shadow: 0 0 0 2px rgb(38 118 90 / 14%);
+}
+
+.bookmark-name-field > button {
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border-radius: 5px;
+  color: #ffffff;
+  background: #26765a;
+}
+
+.bookmark-context-color {
+  display: grid;
+  gap: 5px;
+  padding: 6px;
+  color: #697680;
+  font-size: 11px;
+}
+
+.context-color-picker {
+  display: grid;
+  gap: 7px;
+}
+
+.context-color-presets {
+  display: grid;
+  gap: 5px;
+}
+
+.context-color-picker.dense .context-color-presets { gap: 3px; }
+.context-color-picker.dense .context-color-presets button { padding: 3px 1px; }
+.context-color-picker.dense .context-color-presets button > span { width: 20px; height: 20px; }
+
+.context-color-presets button {
+  min-width: 0;
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  padding: 5px 2px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: inherit;
+  background: transparent;
+}
+
+.context-color-presets button:hover,
+.context-color-presets button.active {
+  border-color: rgb(38 118 90 / 28%);
+  background: rgb(38 118 90 / 8%);
+}
+
+.context-color-presets button > span {
+  width: 22px;
+  height: 22px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px #cbd3d9;
+}
+
+.context-color-presets button.active > span {
+  box-shadow: 0 0 0 2px #26765a;
+}
+
+.context-color-presets small {
+  overflow: hidden;
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.context-custom-color {
+  position: relative;
+  height: 31px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 8px;
+  border: 1px solid #d5dbe1;
+  border-radius: 6px;
+  color: #52616b;
+  cursor: pointer;
+}
+
+.context-custom-color:hover {
+  border-color: #9fb7ac;
+  background: rgb(38 118 90 / 6%);
+}
+
+.context-custom-color input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.context-custom-color i {
+  width: 17px;
+  height: 17px;
+  margin-left: auto;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px #cbd3d9;
+}
+
+.bookmark-clear-dialog-icon {
+  color: #a14742;
+  background: #f8e9e7;
+}
+
+.context-menu-separator {
+  height: 1px;
+  margin: 4px 5px;
+  background: #e2e6eb;
+}
+
+.context-menu-label {
+  padding: 5px 9px 3px;
+  color: #7a8490;
+  font-size: 11px;
+}
+
+.annotation-context-menu {
+  width: 272px;
+  max-width: calc(100vw - 16px);
+  padding: 7px;
+}
+
+.annotation-context-menu .annotation-color-picker {
+  max-width: 100%;
+}
+
+.annotation-context-menu .annotation-color-presets {
+  flex-wrap: wrap;
+}
+
+.area-annotation-menu {
+  width: 304px;
+  padding: 7px;
+}
+.area-annotation-menu .context-color-picker { padding: 0 4px 4px; }
+.area-annotation-menu .context-color-presets { gap: 3px; }
+.area-style-section { display: grid; gap: 8px; padding: 5px 7px 7px; }
+.area-style-section > span { color: #6f7a75; font-size: 11px; }
+.area-border-style-options { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; }
+.area-border-style-options button {
+  min-width: 0;
+  min-height: 42px;
+  display: grid;
+  align-content: center;
+  gap: 5px;
+  padding: 4px;
+  border: 1px solid #dce2df;
+  border-radius: 6px;
+  color: #65716b;
+  background: transparent;
+  font-size: 10px;
+}
+.area-border-style-options button.active { color: #176749; border-color: #79a995; background: #edf6f2; }
+.area-border-style-options i { width: 28px; margin: 0 auto; border-top-width: 2px; border-top-color: currentColor; }
+.area-corner-options { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; }
+.area-corner-options label { display: flex; align-items: center; justify-content: center; gap: 3px; color: #5f6c65; font-size: 10px; }
+.area-corner-options input { accent-color: #26765a; }
+.area-range-field { display: grid; grid-template-columns: 64px minmax(0, 1fr) 34px; align-items: center; gap: 7px; color: #65716b; font-size: 10px; }
+.area-range-field input { min-width: 0; accent-color: #26765a; }
+.area-range-field output { text-align: right; }
+.area-opacity-field { padding: 4px 7px 2px; grid-template-columns: 72px minmax(0, 1fr) 34px; }
+
+:root[data-theme="dark"] .area-border-style-options button { border-color: #46524c; color: #adb8b2; }
+:root[data-theme="dark"] .area-border-style-options button.active { border-color: #578a74; color: #8ed0b4; background: #2c4037; }
+:root[data-theme="dark"] .area-style-section > span,
+:root[data-theme="dark"] .area-corner-options label,
+:root[data-theme="dark"] .area-range-field { color: #aab5af; }
+
+.context-underline-icon {
+  width: 18px;
+  color: #26765a;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 2px;
+}
+
+@keyframes context-menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-3px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

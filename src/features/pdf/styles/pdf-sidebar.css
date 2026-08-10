@@ -1,0 +1,420 @@
+/* PDF navigation sidebar. */
+.pdf-sidebar {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-right: 1px solid #d9dee5;
+  background: #ffffff;
+  container-type: inline-size;
+  container-name: pdf-navigation;
+}
+
+.sidebar-heading {
+  height: 46px;
+  flex: 0 0 46px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 7px 0 14px;
+  border-bottom: 1px solid #e1e6ea;
+}
+
+.sidebar-heading h2 {
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  color: #2d3934;
+  font-size: 17px;
+  font-weight: 720;
+  letter-spacing: 0.01em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar-tabs {
+  height: 40px;
+  flex: 0 0 40px;
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1px solid #d9dee5;
+  background: #ffffff;
+}
+
+.sidebar-tab,
+.sidebar-collapse-button,
+.sidebar-expand-button,
+.page-thumbnail,
+.outline-toggle,
+.outline-title {
+  border: 0;
+  background: transparent;
+  color: inherit;
+}
+
+.sidebar-tab {
+  position: relative;
+  min-width: 0;
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: #687381;
+  font-size: 14px;
+  transition: color 160ms ease, background 160ms ease;
+}
+
+.sidebar-tab > svg,
+.sidebar-collapse-button > svg {
+  flex: 0 0 auto;
+}
+
+.sidebar-tab-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar-tab::after {
+  content: "";
+  position: absolute;
+  right: 22%;
+  bottom: -1px;
+  left: 22%;
+  height: 2px;
+  border-radius: 2px;
+  background: #1f7a5a;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.sidebar-tab:hover {
+  color: #26333d;
+  background: #f7f9fa;
+}
+
+.sidebar-tab.active {
+  color: #175f46;
+  font-weight: 650;
+}
+
+.sidebar-tab.active::after {
+  transform: scaleX(1);
+}
+
+.sidebar-collapse-button {
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 6px;
+  color: #77818d;
+  transition: color 160ms ease, background 160ms ease;
+}
+
+.sidebar-collapse-button:hover,
+.sidebar-expand-button:hover {
+  color: #175f46;
+  background: #eef6f2;
+}
+
+.sidebar-expand-button {
+  width: 47px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 11px;
+  padding-top: 13px;
+  color: #66717f;
+  transition: color 160ms ease, background 160ms ease;
+}
+
+.sidebar-expand-button span {
+  font-size: 12px;
+  letter-spacing: 2px;
+  writing-mode: vertical-rl;
+}
+
+.sidebar-content {
+  min-width: 0;
+  min-height: 0;
+  flex: 1;
+  position: relative;
+}
+
+.sidebar-empty {
+  min-height: 160px;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  color: #8a939e;
+  font-size: 13px;
+  text-align: center;
+}
+
+.pdf-files-placeholder {
+  min-height: 190px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  gap: 9px;
+  padding: 24px 18px;
+  color: #65716c;
+  text-align: center;
+}
+
+.pdf-files-placeholder-icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: #eaf4ef;
+  color: #26765a;
+}
+
+.pdf-files-placeholder strong {
+  max-width: 100%;
+  overflow: hidden;
+  color: #34413c;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pdf-files-placeholder p {
+  max-width: 210px;
+  margin: 0;
+  color: #87918c;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.thumbnail-list,
+.outline-list {
+  height: 100%;
+  min-height: 0;
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #c5ccd4 transparent;
+}
+
+.thumbnail-list {
+  padding: 16px 18px 24px;
+}
+
+.page-thumbnail {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 15px;
+  padding: 8px 10px 7px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+}
+
+.page-thumbnail:hover {
+  border-color: #cdd7d2;
+  background: #f3f8f5;
+  transform: translateY(-1px);
+}
+
+.page-thumbnail.active {
+  border-color: #6ba58e;
+  background: #eaf4ef;
+}
+
+.thumbnail-paper {
+  position: relative;
+  width: 144px;
+  min-height: 92px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid #d5dae0;
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgb(25 38 50 / 10%);
+}
+
+.thumbnail-bookmark {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  min-width: 25px;
+  height: 25px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 0 4px;
+  border: 1px solid rgb(255 255 255 / 90%);
+  border-radius: 5px;
+  color: #ffffff;
+  background: #1f7a5a;
+  box-shadow: 0 2px 6px rgb(20 38 31 / 24%);
+}
+
+.thumbnail-bookmark small {
+  color: inherit;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.thumbnail-paper canvas,
+.thumbnail-paper img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  max-width: 100%;
+}
+
+.thumbnail-number {
+  color: #6e7782;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.page-thumbnail.active .thumbnail-number {
+  color: #175f46;
+  font-weight: 700;
+}
+
+.outline-list {
+  padding: 10px 8px 28px 4px;
+}
+
+.outline-row {
+  min-width: 0;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  padding-right: 8px;
+}
+
+.outline-toggle,
+.outline-toggle-spacer {
+  width: 23px;
+  height: 28px;
+  flex: 0 0 23px;
+}
+
+.outline-toggle {
+  display: grid;
+  place-items: center;
+  border-radius: 5px;
+  color: #7b8590;
+  transition: color 160ms ease, background 160ms ease;
+}
+
+.outline-toggle:hover {
+  color: #1f7a5a;
+  background: #edf4f1;
+}
+
+.outline-toggle svg {
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.outline-toggle.expanded svg {
+  transform: rotate(90deg);
+}
+
+.outline-title {
+  position: relative;
+  min-width: 0;
+  height: 30px;
+  flex: 1;
+  overflow: hidden;
+  padding: 0 4px;
+  color: #45515d;
+  font-size: 13px;
+  line-height: 30px;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: color 180ms ease, font-weight 180ms ease;
+}
+
+.outline-title::after {
+  content: "";
+  position: absolute;
+  right: 4px;
+  bottom: 2px;
+  left: 4px;
+  height: 2px;
+  border-radius: 2px;
+  background: #268060;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.outline-title:hover {
+  color: #1d6c50;
+}
+
+.outline-title.active {
+  color: #155e44;
+  font-weight: 750;
+}
+
+.outline-title.active::after {
+  transform: scaleX(1);
+}
+
+.outline-title.unavailable {
+  cursor: default;
+  color: #7d8792;
+}
+
+.outline-children {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 240ms cubic-bezier(0.22, 1, 0.36, 1), opacity 160ms ease;
+}
+
+.outline-children > div {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.outline-children.expanded {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+@container pdf-navigation (max-width: 250px) {
+  .sidebar-tab-label {
+    display: none;
+  }
+
+  .sidebar-tab {
+    gap: 0;
+  }
+
+  .sidebar-tab::after {
+    right: 30%;
+    left: 30%;
+  }
+
+  .thumbnail-list {
+    padding-inline: 10px;
+  }
+
+  .pdf-files-placeholder {
+    padding-inline: 12px;
+  }
+}

@@ -1,0 +1,190 @@
+.markdown-reader-area {
+  background: #eef1f4;
+}
+
+.markdown-content {
+  min-width: 0;
+  min-height: 0;
+  flex: 1;
+  display: grid;
+  overflow: hidden;
+}
+
+.markdown-view-source,
+.markdown-view-realtime {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.markdown-view-split {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.markdown-view-split > :first-child {
+  border-right: 1px solid #d3d9e0;
+}
+
+.markdown-editor-pane {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  background: #ffffff;
+}
+
+.markdown-editor {
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  flex: 1;
+  resize: none;
+  border: 0;
+  outline: 0;
+  padding: 28px 34px 80px;
+  background: #ffffff;
+  color: #26313d;
+  font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+  font-size: 15px;
+  line-height: 1.72;
+  tab-size: 2;
+  scrollbar-gutter: stable;
+  overscroll-behavior: contain;
+}
+
+.markdown-editor:focus {
+  box-shadow: inset 0 0 0 1px rgb(35 129 95 / 18%);
+}
+
+.markdown-status-bar {
+  height: 26px;
+  flex: 0 0 26px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  border-top: 1px solid #d9dee5;
+  background: #f8fafb;
+  color: #697480;
+  font-size: 12px;
+}
+
+.markdown-status-bar > div {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.markdown-status-bar > div:last-child {
+  justify-content: flex-end;
+}
+
+.markdown-status-bar .dirty {
+  color: #176749;
+  font-weight: 650;
+}
+
+.markdown-mode-toolbar {
+  gap: 6px;
+}
+
+.markdown-history-tools,
+.markdown-dropdown-group,
+.markdown-block-tools,
+.markdown-insert-tools,
+.markdown-mode-toolbar .document-navigation-tools {
+  flex: 0 0 auto;
+  gap: 4px;
+  padding-right: 7px;
+  border-right: 1px solid #e0e5ea;
+}
+
+.markdown-mode-toolbar .app-dropdown-menu {
+  right: auto;
+  left: 0;
+  width: 238px;
+}
+
+.markdown-mode-toolbar .app-menu-trigger {
+  min-width: 76px;
+}
+
+.markdown-command-button {
+  padding-inline: 7px;
+}
+
+.markdown-view-tools {
+  gap: 4px;
+  padding: 3px;
+  border: 1px solid #d4dae1;
+  border-radius: 8px;
+  background: #f5f7f9;
+}
+
+.markdown-view-button {
+  height: 29px;
+  border-color: transparent;
+  background: transparent;
+  color: #63707c;
+}
+
+.markdown-view-button.active {
+  border-color: #b4cfc3;
+  background: #ffffff;
+  color: #176749;
+  box-shadow: 0 1px 3px rgb(30 50 40 / 10%);
+}
+
+.markdown-save-button.dirty {
+  border-color: #8bb5a4;
+  color: #176749;
+  background: #edf6f2;
+}
+
+.markdown-save-button:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+@media (max-width: 1120px) {
+  .markdown-view-button span {
+    display: none;
+  }
+}
+
+@container active-toolbar (max-width: 1150px) {
+  .markdown-command-button .markdown-tool-label,
+  .markdown-mode-toolbar .app-menu-trigger > span,
+  .markdown-mode-toolbar .app-menu-trigger .app-menu-chevron {
+    display: none;
+  }
+
+  .markdown-command-button,
+  .markdown-mode-toolbar .app-menu-trigger {
+    width: 32px;
+    min-width: 32px;
+    height: 32px;
+    padding: 0;
+  }
+}
+
+@container active-toolbar (max-width: 980px) {
+  .markdown-view-button span,
+  .markdown-save-button span {
+    display: none;
+  }
+
+  .markdown-view-button,
+  .markdown-save-button,
+  .markdown-history-tools .icon-button {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+  }
+
+  .markdown-mode-toolbar,
+  .markdown-history-tools,
+  .markdown-dropdown-group,
+  .markdown-block-tools,
+  .markdown-insert-tools {
+    gap: 3px;
+  }
+}

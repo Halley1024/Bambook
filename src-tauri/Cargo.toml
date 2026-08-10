@@ -1,0 +1,27 @@
+[package]
+name = "bambook"
+version = "0.1.0"
+description = "Bambook PDF reader and Markdown editor for Windows"
+authors = ["halley"]
+edition = "2021"
+
+[lib]
+name = "bambook_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2.3.1", features = [] }
+
+[dependencies]
+mupdf = { path = "native/mupdf-rs", default-features = false, features = ["base14-fonts", "html", "system-fonts"] }
+pulldown-cmark = "0.13.4"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+sha2 = "0.10"
+tauri = { version = "2.7.0", features = [] }
+tauri-plugin-dialog = "2.3.2"
+thiserror = "2.0"
+unicode-normalization = "0.1"
+
+[target.'cfg(windows)'.dependencies]
+windows-sys = { version = "0.59", features = ["Win32_Storage_FileSystem"] }

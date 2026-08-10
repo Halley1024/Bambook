@@ -1,0 +1,4 @@
+[env]
+# mupdf-sys uses bindgen during compilation. Keeping libclang in the project
+# makes Windows builds reproducible without a machine-wide LLVM installation.
+LIBCLANG_PATH = { value = "src-tauri/native/libclang/clang/native", relative = true }

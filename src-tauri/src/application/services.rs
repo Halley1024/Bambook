@@ -1,0 +1,21 @@
+mod annotation_service;
+mod document_history_service;
+mod document_search_service;
+mod document_service;
+mod export_service;
+mod markdown_document_service;
+mod pdf_document_service;
+mod settings_service;
+mod storage_service;
+mod workspace_state_service;
+
+pub(crate) use annotation_service::AnnotationService;
+pub(crate) use document_history_service::DocumentHistoryService;
+pub(crate) use document_search_service::DocumentSearchService;
+pub(crate) use document_service::DocumentService;
+pub(crate) use export_service::ExportService;
+pub(crate) use markdown_document_service::MarkdownDocumentService;
+pub(crate) use pdf_document_service::PdfDocumentService;
+pub(crate) use settings_service::SettingsService;
+pub(crate) use storage_service::StorageService;
+pub(crate) use workspace_state_service::WorkspaceStateService;

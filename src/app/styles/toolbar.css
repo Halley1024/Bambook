@@ -1,0 +1,713 @@
+/* Application toolbar layout. */
+.toolbar {
+  height: 56px;
+  flex: 0 0 56px;
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr) minmax(112px, max-content);
+  align-items: center;
+  column-gap: 12px;
+  padding: 8px 14px;
+  border-bottom: 1px solid #d9dee5;
+  background: #ffffff;
+  container-type: inline-size;
+  container-name: top-toolbar;
+}
+
+.toolbar-section {
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.toolbar-section-left {
+  justify-content: flex-start;
+}
+
+.application-identity {
+  min-width: 142px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #2d3944;
+  font-size: 14px;
+  font-weight: 680;
+  white-space: nowrap;
+}
+
+.application-identity-icon {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  color: #ffffff;
+  background: #1f7a5a;
+}
+
+.empty-document-toolbar {
+  color: #87919b;
+  font-size: 13px;
+}
+
+.toolbar-section-center {
+  padding: 0 12px;
+  border-left: 1px solid #e3e7ec;
+  border-right: 1px solid #e3e7ec;
+  container-type: inline-size;
+  container-name: active-toolbar;
+}
+
+.toolbar-section-right {
+  width: 100%;
+  justify-content: flex-end;
+}
+
+.mode-toolbar {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.markdown-mode-toolbar .search-box {
+  max-width: 520px;
+}
+
+.toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.document-navigation-tools {
+  flex: 0 0 auto;
+  gap: 6px;
+}
+
+.document-search-host {
+  position: relative;
+}
+
+.document-search-trigger.active {
+  color: #176749;
+  border-color: #8bb5a4;
+  background: #edf6f2;
+}
+
+.document-search-popover {
+  position: absolute;
+  z-index: 1250;
+  top: calc(100% + 9px);
+  left: 0;
+  width: 390px;
+  padding: 11px;
+  border: 1px solid #d3dae2;
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0 12px 30px rgb(25 37 48 / 18%);
+  animation: context-menu-in 120ms ease-out;
+}
+
+.document-search-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.document-search-input {
+  min-width: 0;
+  height: 34px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 9px;
+  border: 1px solid #cfd6df;
+  border-radius: 7px;
+  color: #66717f;
+  background: #f8fafb;
+}
+
+.document-search-input:focus-within {
+  border-color: #73a993;
+  box-shadow: 0 0 0 2px rgb(31 122 90 / 10%);
+}
+
+.document-search-input input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  color: #202a33;
+  background: transparent;
+}
+
+.search-popover-button {
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 6px;
+  color: #55616e;
+  background: transparent;
+}
+
+.search-popover-button:not(:disabled):hover {
+  color: #176749;
+  background: #edf5f1;
+}
+
+.document-search-options {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 10px 3px 1px;
+  border-top: 1px solid #edf0f3;
+  margin-top: 9px;
+}
+
+.document-search-count {
+  min-width: 42px;
+  color: #66717f;
+  font-size: 12px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.document-search-results {
+  max-height: 310px;
+  margin-top: 9px;
+  overflow-y: auto;
+  border-top: 1px solid #edf0f3;
+}
+
+.document-search-result {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr);
+  gap: 8px;
+  padding: 8px 7px;
+  border: 0;
+  border-bottom: 1px solid #f0f2f4;
+  color: #46515d;
+  background: transparent;
+  font-size: 12px;
+  line-height: 1.45;
+  text-align: left;
+}
+
+.document-search-result:hover,
+.document-search-result.active {
+  background: #edf6f2;
+}
+
+.document-search-result.active {
+  box-shadow: inset 3px 0 #1f7a5a;
+}
+
+.document-search-result-location {
+  color: #187052;
+  font-weight: 650;
+}
+
+.document-search-result strong {
+  color: #173f32;
+  background: #d6eee4;
+}
+
+.document-search-message {
+  padding: 14px 6px 5px;
+  color: #697480;
+  font-size: 12px;
+}
+
+.document-search-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #596572;
+  font-size: 12px;
+  user-select: none;
+}
+
+.document-search-option input {
+  width: 14px;
+  height: 14px;
+  accent-color: #1f7a5a;
+}
+
+.history-navigation-button:disabled {
+  opacity: 0.48;
+}
+
+.pdf-page-navigation {
+  flex: 0 0 auto;
+  margin-left: auto;
+  padding-left: 8px;
+  border-left: 1px solid #e0e5ea;
+}
+
+.pdf-mode-toolbar {
+  gap: 8px;
+}
+
+.pdf-mode-toolbar .pdf-page-navigation {
+  margin-left: 0;
+  padding: 0 10px 0 0;
+  border-left: 0;
+  border-right: 1px solid #e0e5ea;
+}
+
+.pdf-zoom-tools,
+.pdf-mode-toolbar .document-navigation-tools {
+  padding-right: 10px;
+  border-right: 1px solid #e0e5ea;
+}
+
+.pdf-annotation-tools {
+  flex: 0 0 auto;
+  gap: 4px;
+  padding-right: 6px;
+  border-right: 1px solid #e0e5ea;
+}
+
+.pdf-annotation-tools .tool-button {
+  padding-inline: 7px;
+}
+
+.annotation-palette-icon {
+  filter: drop-shadow(0 0 0.35px rgb(20 29 25 / 70%));
+  transition: color 160ms ease;
+}
+
+.annotation-toolbar-color-popover {
+  right: 0;
+  width: 286px;
+  padding: 12px;
+}
+
+.pdf-page-input {
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 8px;
+  border: 1px solid #cfd6df;
+  border-radius: 7px;
+  color: #65707c;
+  background: #f8fafb;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.pdf-page-input:focus-within {
+  border-color: #73a993;
+  box-shadow: 0 0 0 2px rgb(31 122 90 / 10%);
+}
+
+.pdf-page-input input {
+  width: 35px;
+  border: 0;
+  outline: 0;
+  color: #202a33;
+  background: transparent;
+  font: inherit;
+  text-align: right;
+}
+
+.toolbar-popover-host {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.pdf-scale-trigger {
+  height: 36px;
+  min-width: 70px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border: 1px solid #cfd6df;
+  border-radius: 7px;
+  color: #4e5965;
+  background: #ffffff;
+}
+
+.pdf-scale-trigger:hover,
+.pdf-scale-trigger.active,
+.pdf-bookmark-tools > .tool-button.active {
+  color: #176749;
+  border-color: #8bb5a4;
+  background: #edf6f2;
+}
+
+.toolbar-popover {
+  position: absolute;
+  z-index: 1250;
+  top: calc(100% + 9px);
+  min-width: 150px;
+  padding: 7px;
+  border: 1px solid #d3dae2;
+  border-radius: 9px;
+  color: #34404b;
+  background: #ffffff;
+  box-shadow: 0 12px 30px rgb(25 37 48 / 18%);
+  animation: context-menu-in 120ms ease-out;
+}
+
+.toolbar-popover button {
+  border: 0;
+  border-radius: 6px;
+  color: inherit;
+  background: transparent;
+}
+
+.zoom-level-menu {
+  left: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2px;
+}
+
+.zoom-level-menu button {
+  height: 32px;
+}
+
+.zoom-level-menu button:hover,
+.zoom-level-menu button[aria-checked="true"] {
+  color: #176749;
+  background: #edf6f2;
+}
+
+.toolbar-count-badge {
+  min-width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
+  border-radius: 999px;
+  color: #ffffff;
+  background: #1f7a5a;
+  font-size: 10px;
+}
+
+.bookmark-list-popover {
+  right: 0;
+  width: 310px;
+  padding: 8px;
+}
+
+.bookmark-list-popover > p {
+  margin: 0;
+  padding: 22px 12px;
+  color: #7a8590;
+  font-size: 12px;
+  text-align: center;
+}
+
+.bookmark-list-heading {
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 7px 6px;
+  border-bottom: 1px solid #e8ecef;
+  font-size: 13px;
+}
+
+.bookmark-list-heading span {
+  color: #7a8590;
+}
+
+.bookmark-list {
+  max-height: 320px;
+  overflow-y: auto;
+  padding-top: 5px;
+}
+
+.bookmark-list-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  padding: 7px 4px 1px;
+  border-top: 1px solid #e8ecef;
+}
+
+.bookmark-list-actions button {
+  height: 28px;
+  padding: 0 9px;
+  border-radius: 5px;
+  color: #55636d;
+  background: #f3f6f5;
+}
+
+.bookmark-list-actions button.danger { color: #b42318; }
+.bookmark-list-actions button:disabled { opacity: .42; }
+
+.bookmark-list-item {
+  display: flex;
+  align-items: center;
+  border-radius: 6px;
+}
+
+.bookmark-list-item:hover {
+  background: #edf6f2;
+}
+
+.bookmark-jump {
+  min-width: 0;
+  height: 42px;
+  flex: 1;
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr) max-content;
+  align-items: center;
+  gap: 7px;
+  padding: 0 8px;
+  color: #40505a !important;
+  text-align: left;
+}
+
+.bookmark-jump svg {
+  color: #1f7a5a;
+}
+
+.bookmark-jump span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bookmark-jump small {
+  color: #818b95;
+}
+
+.bookmark-delete {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  margin-right: 4px;
+  color: #7a8590 !important;
+}
+
+.bookmark-delete:hover {
+  color: #b42318 !important;
+  background: #fff0ee !important;
+}
+
+.icon-button:disabled,
+.tool-button:disabled,
+.search-popover-button:disabled {
+  cursor: default;
+  opacity: 0.42;
+}
+
+.toolbar-file-actions {
+  min-width: 0;
+  flex: 0 0 auto;
+  justify-content: flex-end;
+}
+
+@container top-toolbar (max-width: 1400px) {
+  .toolbar-section-right .app-menu-trigger > span,
+  .toolbar-section-right .app-menu-trigger .app-menu-chevron {
+    display: none;
+  }
+
+  .toolbar-section-right .app-menu-trigger {
+    width: 32px;
+    min-width: 32px;
+    height: 32px;
+    padding: 0;
+  }
+}
+
+.tool-button,
+.icon-button,
+.small-icon-button {
+  border: 1px solid #cfd6df;
+  background: #ffffff;
+  color: #202124;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border-radius: 7px;
+}
+
+.tool-button {
+  height: 36px;
+  padding: 0 11px;
+}
+
+.tool-button.primary {
+  background: #1f7a5a;
+  border-color: #1f7a5a;
+  color: #ffffff;
+}
+
+.toolbar-divider {
+  width: 1px;
+  height: 28px;
+  flex: 0 0 1px;
+  margin-left: auto;
+  background: #d9dee5;
+}
+
+.icon-button {
+  width: 36px;
+  height: 36px;
+}
+
+.fit-view-button {
+  color: #5f6875;
+  transition: color 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.fit-view-button:hover,
+.fit-view-button.active {
+  color: #176749;
+  border-color: #8bb5a4;
+  background: #edf6f2;
+}
+
+.markup-tool-button.active,
+.annotation-palette-button.active,
+.annotation-mode-button.active {
+  color: #176749;
+  border-color: #8bb5a4;
+  background: #edf6f2;
+}
+
+@container active-toolbar (max-width: 1400px) {
+  .pdf-annotation-tools .tool-label,
+  .pdf-bookmark-tools .tool-button > span {
+    display: none;
+  }
+
+  .pdf-annotation-tools .tool-button,
+  .pdf-bookmark-tools .tool-button {
+    width: 36px;
+    padding-inline: 0;
+  }
+}
+
+.small-icon-button {
+  width: 28px;
+  height: 28px;
+  margin-left: auto;
+}
+
+.search-box {
+  flex: 1;
+  min-width: 150px;
+  max-width: 440px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px;
+  border: 1px solid #cfd6df;
+  border-radius: 7px;
+  background: #f8fafb;
+}
+
+.search-box input,
+.path-row input {
+  border: 0;
+  outline: 0;
+  width: 100%;
+  background: transparent;
+}
+
+.scale-label {
+  min-width: 48px;
+  text-align: center;
+  color: #5f6875;
+}
+
+@media (max-width: 1380px) {
+  .pdf-bookmark-tools .tool-button > span {
+    display: none;
+  }
+
+  .pdf-bookmark-tools .tool-button {
+    width: 36px;
+    padding: 0;
+  }
+
+  .pdf-mode-toolbar {
+    gap: 5px;
+  }
+
+  .pdf-mode-toolbar .icon-button,
+  .pdf-mode-toolbar .tool-button {
+    width: 32px;
+    height: 32px;
+  }
+
+  .pdf-mode-toolbar .pdf-page-input,
+  .pdf-mode-toolbar .pdf-scale-trigger {
+    height: 32px;
+  }
+
+  .pdf-mode-toolbar .pdf-scale-trigger {
+    min-width: 60px;
+  }
+
+  .pdf-page-navigation,
+  .pdf-zoom-tools,
+  .pdf-annotation-tools {
+    gap: 5px;
+  }
+}
+
+@media (max-width: 1180px) {
+  .toolbar {
+    column-gap: 8px;
+    padding-inline: 10px;
+  }
+
+  .toolbar-section-center {
+    padding-inline: 8px;
+  }
+
+  .application-identity {
+    min-width: 32px;
+  }
+
+  .application-identity > span:last-child {
+    display: none;
+  }
+
+  .pdf-mode-toolbar {
+    gap: 4px;
+  }
+
+  .pdf-mode-toolbar .search-box {
+    max-width: 260px;
+  }
+
+  .toolbar-file-actions .tool-button,
+  .pdf-annotation-tools .tool-button {
+    padding-inline: 8px;
+  }
+
+}
+
+@media (max-width: 1080px) {
+  .pdf-mode-toolbar .search-box {
+    min-width: 100px;
+  }
+
+  .pdf-annotation-tools .tool-button span {
+    display: none;
+  }
+}

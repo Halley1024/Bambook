@@ -1,0 +1,317 @@
+.side-panel {
+  min-width: 0;
+  min-height: 0;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-left: 1px solid #d9dee5;
+}
+
+.panel-heading {
+  height: 46px;
+  flex: 0 0 46px;
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #d9dee5;
+}
+
+.panel-heading h2 {
+  font-size: 17px;
+  font-weight: 720;
+  letter-spacing: 0.01em;
+  margin: 0;
+}
+
+.panel-heading-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.annotation-heading-actions { display:flex;align-items:center;gap:9px;color:#66717f;font-size:12px }
+.annotation-merge-button { height:28px;display:inline-flex;align-items:center;gap:5px;padding:0 8px;border:1px solid #cfd8d3;border-radius:6px;background:#fff;color:#315f4d;font-size:12px }
+.annotation-merge-button:hover:not(:disabled) { background:#eef6f2;border-color:#8eb8a6 }
+.annotation-merge-button:disabled { opacity:.45;cursor:default }
+.annotation-merge-checkbox { width:14px;height:14px;margin:0;accent-color:#26765a;flex:0 0 auto }
+
+.annotation-collapse-button,
+.annotation-expand-button {
+  border: 0;
+  background: transparent;
+  color: #77818d;
+}
+
+.annotation-collapse-button {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 6px;
+  transition: color 160ms ease, background 160ms ease;
+}
+
+.annotation-collapse-button:hover,
+.annotation-expand-button:hover {
+  color: #175f46;
+  background: #eef6f2;
+}
+
+.annotation-expand-button {
+  width: 47px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 11px;
+  padding-top: 13px;
+  transition: color 160ms ease, background 160ms ease;
+}
+
+.annotation-collapsed-count {
+  min-width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  color: #175f46;
+  background: #e6f2ec;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.annotation-collapsed-label {
+  font-size: 12px;
+  letter-spacing: 2px;
+  writing-mode: vertical-rl;
+}
+
+.annotation-list {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 12px;
+}
+
+.annotation-card {
+  border: 1px solid #d9dee5;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+  background: #fbfcfd;
+  transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+
+.annotation-card.selected {
+  border-color: #72a992;
+  background: #f3f9f6;
+  box-shadow: 0 0 0 2px rgb(38 118 90 / 12%);
+}
+
+.annotation-meta {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #66717f;
+  font-size: 13px;
+}
+
+.annotation-kind-color-icon {
+  --annotation-icon-color: #26765a;
+  --annotation-fill-color: #26765a;
+  position: relative;
+  width: 22px;
+  height: 18px;
+  flex: 0 0 22px;
+  display: grid;
+  place-items: center;
+  color: var(--annotation-icon-color);
+  font-size: 13px;
+  line-height: 1;
+}
+
+.annotation-kind-color-icon b { font-weight: 650; }
+.annotation-kind-color-icon.highlight b {
+  padding: 2px 3px;
+  border-radius: 2px;
+  color: #26323d;
+  background: color-mix(in srgb, var(--annotation-icon-color) 55%, transparent);
+}
+.annotation-kind-color-icon.underline b {
+  text-decoration: underline;
+  text-decoration-color: var(--annotation-icon-color);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 2px;
+}
+.annotation-kind-color-icon.squiggly b {
+  text-decoration-line: underline;
+  text-decoration-style: wavy;
+  text-decoration-color: var(--annotation-icon-color);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 2px;
+}
+.annotation-kind-color-icon.strikeout b {
+  text-decoration: line-through;
+  text-decoration-color: var(--annotation-icon-color);
+  text-decoration-thickness: 2px;
+}
+.annotation-kind-color-icon.note i {
+  width: 15px;
+  height: 12px;
+  border: 2px solid var(--annotation-icon-color);
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--annotation-icon-color) 20%, transparent);
+}
+.annotation-kind-color-icon.note i::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  bottom: 0;
+  width: 5px;
+  height: 5px;
+  border-left: 2px solid var(--annotation-icon-color);
+  transform: skewY(-40deg);
+}
+.annotation-kind-color-icon.area {
+  border: 2px dashed var(--annotation-icon-color);
+  border-radius: 3px;
+}
+.annotation-kind-color-icon.area i {
+  width: 11px;
+  height: 7px;
+  border-radius: 1px;
+  background: var(--annotation-fill-color);
+}
+
+.annotation-type-label {
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: #eef2f5;
+  font-size: 11px;
+}
+
+.annotation-color-picker {
+  width: 224px;
+  display: grid;
+  gap: 10px;
+}
+
+.annotation-color-picker.compact {
+  width: 244px;
+  padding: 4px 7px 8px;
+}
+
+.annotation-color-presets {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.annotation-color-swatch {
+  width: 24px !important;
+  height: 24px !important;
+  flex: 0 0 24px;
+  padding: 0 !important;
+  border: 2px solid #ffffff !important;
+  border-radius: 999px !important;
+  box-shadow: 0 0 0 1px #c6cdd5;
+}
+
+.annotation-color-swatch.active {
+  box-shadow: 0 0 0 2px #26333f;
+}
+
+.annotation-color-custom {
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  align-items: center;
+  gap: 8px;
+}
+
+.annotation-color-custom label {
+  width: 30px;
+  height: 30px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #cbd2da;
+  border-radius: 6px;
+}
+
+.annotation-color-custom input[type="color"] {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  inset: -10px;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.annotation-color-custom label span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.annotation-color-custom > input {
+  min-width: 0;
+  height: 30px;
+  padding: 0 8px;
+  border: 1px solid #cbd2da;
+  border-radius: 6px;
+  font: 12px/1 ui-monospace, SFMono-Regular, Consolas, monospace;
+  text-transform: uppercase;
+}
+
+.annotation-card blockquote {
+  margin: 10px 0;
+  padding-left: 10px;
+  border-left: 3px solid #cfd6df;
+  color: #7b858f;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.annotation-card blockquote.collapsed {
+  max-height: none;
+  overflow: visible;
+}
+
+.annotation-card blockquote.expanded {
+  max-height: none;
+}
+
+.annotation-card textarea {
+  width: 100%;
+  resize: vertical;
+  border: 1px solid #cfd6df;
+  border-radius: 6px;
+  padding: 8px;
+  background: #ffffff;
+}
+
+.annotation-card .annotation-note-editor {
+  height: 34px;
+  min-height: 34px;
+  padding-block: 7px;
+  resize: none;
+  overflow: hidden;
+}
+
+.annotation-card.selected .annotation-note-editor {
+  height: auto;
+  min-height: 76px;
+  resize: vertical;
+  overflow: auto;
+}
+
+.annotation-card .annotation-excerpt-editor {
+  min-height: 96px;
+  margin: 10px 0;
+  line-height: 1.5;
+  color: #7b858f;
+  box-sizing: border-box;
+  overflow-y: auto;
+}

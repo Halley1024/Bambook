@@ -1,0 +1,48 @@
+.app-shell {
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.workspace {
+  --workspace-left-width: 280px;
+  --workspace-right-width: 340px;
+  min-height: 0;
+  flex: 1;
+  display: grid;
+  grid-template-columns: var(--workspace-left-width) minmax(0, 1fr) var(--workspace-right-width);
+  overflow: hidden;
+  transition: grid-template-columns 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.workspace.sidebar-collapsed {
+  grid-template-columns: 48px minmax(0, 1fr) var(--workspace-right-width);
+}
+
+.workspace.annotation-collapsed {
+  grid-template-columns: var(--workspace-left-width) minmax(0, 1fr) 48px;
+}
+
+.workspace.sidebar-collapsed.annotation-collapsed {
+  grid-template-columns: 48px minmax(0, 1fr) 48px;
+}
+
+.workspace.markdown-workspace {
+  --workspace-right-width: 310px;
+  grid-template-columns: var(--workspace-left-width) minmax(0, 1fr) var(--workspace-right-width);
+}
+
+.workspace.markdown-workspace.sidebar-collapsed {
+  grid-template-columns: 48px minmax(0, 1fr) var(--workspace-right-width);
+}
+
+.workspace.markdown-workspace.help-collapsed {
+  grid-template-columns: var(--workspace-left-width) minmax(0, 1fr) 48px;
+}
+
+.workspace.markdown-workspace.sidebar-collapsed.help-collapsed {
+  grid-template-columns: 48px minmax(0, 1fr) 48px;
+}

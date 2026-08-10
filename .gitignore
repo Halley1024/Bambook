@@ -1,0 +1,40 @@
+# Frontend dependencies and outputs
+node_modules/
+dist/
+coverage/
+.vite/
+
+# Rust and Tauri outputs
+target/
+src-tauri/target/
+src-tauri/gen/
+
+# Restorable native build tools
+src-tauri/native/libclang/
+
+# Local runtime data and environment files
+storage/
+theme/
+.env
+.env.*
+!.env.example
+
+# Editors and assistant metadata
+.vscode/
+.idea/
+.workbuddy/
+.codex/
+.agents/
+
+# Logs, temporary files and OS metadata
+*.log
+*.tmp
+.tmp/
+*.bak
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Local build-check directories
+.codex-build-check/
