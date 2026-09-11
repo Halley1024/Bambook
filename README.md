@@ -6,6 +6,8 @@ Bambook 是一款面向 Windows 的轻量级桌面文档工具，使用 Tauri、
 
 PDF 由 Rust 后端通过 MuPDF 解析页面、文字层和目录等结构化数据，前端负责虚拟化渲染与交互；Markdown 由后端维护文档会话、AST、目录和搜索数据，前端负责编辑、预览与导航。设置、最近文件、关闭记录、阅读状态和工作区状态使用本地 JSON 持久化，默认保存在 `%LOCALAPPDATA%\Bambook`。
 
+[homepage][]
+
 ## 功能
 
 ### 统一文档工作区
