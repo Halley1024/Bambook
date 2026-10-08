@@ -1,0 +1,112 @@
+.app-menu-host {
+  position: relative;
+}
+
+.app-menu-trigger {
+  min-width: 82px;
+}
+
+.app-menu-trigger.active {
+  color: #176749;
+  border-color: #8bb5a4;
+  background: #edf6f2;
+}
+
+.app-menu-chevron {
+  margin-left: 1px;
+  color: #77828d;
+  transition: transform 140ms ease;
+}
+
+.app-menu-trigger.active .app-menu-chevron {
+  transform: rotate(180deg);
+}
+
+.app-dropdown-menu {
+  position: absolute;
+  z-index: 1400;
+  top: calc(100% + 9px);
+  right: 0;
+  width: 228px;
+  padding: 6px;
+  border: 1px solid #d3dae2;
+  border-radius: 9px;
+  background: #ffffff;
+  box-shadow: 0 14px 34px rgb(25 37 48 / 20%);
+  animation: context-menu-in 120ms ease-out;
+}
+
+.app-dropdown-menu-group {
+  display: grid;
+}
+
+.app-dropdown-menu-item-host { position: relative; }
+.app-dropdown-submenu {
+  position: absolute;
+  z-index: 1410;
+  top: -7px;
+  right: 100%;
+  padding-right: 7px;
+  display: none;
+}
+.app-dropdown-menu-item-host:hover > .app-dropdown-submenu,
+.app-dropdown-menu-item-host:focus-within > .app-dropdown-submenu { display: block; }
+
+.app-dropdown-menu-divider {
+  height: 1px;
+  margin: 5px 7px;
+  background: #e6eaee;
+}
+
+.app-dropdown-menu-item {
+  width: 100%;
+  min-height: 34px;
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr) max-content;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 9px;
+  border: 0;
+  border-radius: 6px;
+  color: #34404c;
+  background: transparent;
+  font-size: 13px;
+  text-align: left;
+}
+
+.app-dropdown-menu-item:not(:disabled):hover,
+.app-dropdown-menu-item:not(:disabled):focus-visible {
+  outline: none;
+  color: #176749;
+  background: #edf6f2;
+}
+
+.app-dropdown-menu-item:disabled {
+  cursor: default;
+  color: #9ba4ad;
+}
+
+.app-dropdown-menu-item.danger:not(:disabled) {
+  color: #a43d3d;
+}
+
+.app-dropdown-menu-item.danger:not(:disabled):hover {
+  background: #fff0f0;
+}
+
+.app-dropdown-menu-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-dropdown-menu-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.app-dropdown-menu-shortcut {
+  color: #8a949f;
+  font-size: 11px;
+}

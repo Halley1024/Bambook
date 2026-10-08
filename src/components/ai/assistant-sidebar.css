@@ -1,0 +1,521 @@
+.assistant-sidebar {
+    position: relative;
+    min-width: 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-left: 1px solid #d9dee5;
+    background: #fff
+}
+
+.assistant-sidebar-header {
+    height: 46px;
+    flex: 0 0 46px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 8px 0 12px;
+    border-bottom: 1px solid #d9dee5
+}
+
+.assistant-sidebar-header>div {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: #26765a
+}
+
+.assistant-sidebar-header h2 {
+    margin: 0;
+    overflow: hidden;
+    color: #2f3d36;
+    font-size: 17px;
+    font-weight: 720;
+    text-overflow: ellipsis;
+    white-space: nowrap
+}
+
+.assistant-sidebar-header button {
+    width: 32px;
+    height: 32px;
+    display: grid;
+    place-items: center;
+    flex: 0 0 32px;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: #77818d
+}
+
+.assistant-sidebar-header button:hover,
+.assistant-sidebar-expand:hover {
+    color: #176749;
+    background: #edf6f2
+}
+
+.assistant-sidebar-expand {
+    width: 48px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 11px;
+    padding-top: 13px;
+    border: 0;
+    background: transparent;
+    color: #77818d
+}
+
+.assistant-sidebar-expand span {
+    font-size: 12px;
+    letter-spacing: 2px;
+    writing-mode: vertical-rl
+}
+
+.assistant-sidebar-content {
+    min-height: 0;
+    flex: 1;
+    display: grid;
+    grid-template-rows: minmax(180px, 1fr) auto auto;
+    overflow: hidden;
+    background: #f7f9f8
+}
+
+.assistant-conversation {
+    min-height: 0;
+    overflow: auto;
+    padding: 14px 14px 10px
+}
+
+.assistant-message-list {
+    display: grid;
+    gap: 13px
+}
+
+.assistant-message header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 5px;
+    color: #718079;
+    font-size: 10px
+}
+
+.assistant-message header span {
+    color: #415048;
+    font-weight: 700
+}
+
+.assistant-message header small {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap
+}
+
+.assistant-message-content {
+    color: #35423c;
+    font-size: 12px;
+    line-height: 1.7;
+    overflow-wrap: anywhere
+}
+
+.assistant-message-content.plain {
+    white-space: pre-wrap
+}
+
+.assistant-message.user .assistant-message-content {
+    padding: 8px 10px;
+    border-radius: 7px;
+    background: #e9f3ed;
+    color: #254335
+}
+
+.assistant-message.assistant .assistant-message-content {
+    padding: 2px 0
+}
+
+.assistant-message-content>*:first-child {
+    margin-top: 0
+}
+
+.assistant-message-content>*:last-child {
+    margin-bottom: 0
+}
+
+.assistant-message-content p {
+    margin: 0 0 9px
+}
+
+.assistant-message-content h1,
+.assistant-message-content h2,
+.assistant-message-content h3,
+.assistant-message-content h4,
+.assistant-message-content h5,
+.assistant-message-content h6 {
+    margin: 13px 0 6px;
+    color: #26332e;
+    line-height: 1.35
+}
+
+.assistant-message-content h1 {
+    font-size: 17px
+}
+
+.assistant-message-content h2 {
+    font-size: 15px
+}
+
+.assistant-message-content h3,
+.assistant-message-content h4,
+.assistant-message-content h5,
+.assistant-message-content h6 {
+    font-size: 13px
+}
+
+.assistant-message-content strong {
+    color: #17231d;
+    font-weight: 750
+}
+
+.assistant-message-content ul,
+.assistant-message-content ol {
+    margin: 6px 0 10px;
+    padding-left: 20px
+}
+
+.assistant-message-content li+li {
+    margin-top: 4px
+}
+
+.assistant-message-content blockquote {
+    margin: 9px 0;
+    padding: 7px 10px;
+    border-left: 3px solid #8fb19f;
+    background: #f4f8f5;
+    color: #526159
+}
+
+.assistant-message-content code {
+    padding: 1px 4px;
+    border-radius: 4px;
+    background: #edf2ef;
+    color: #235b45;
+    font: 11px/1.5 ui-monospace, SFMono-Regular, Consolas, monospace
+}
+
+.assistant-message-content pre {
+    margin: 9px 0;
+    overflow: auto;
+    padding: 10px;
+    border-radius: 7px;
+    background: #24322c;
+    color: #eef5f1
+}
+
+.assistant-message-content pre code {
+    padding: 0;
+    background: transparent;
+    color: inherit
+}
+
+.assistant-message-content a {
+    color: #176749;
+    text-decoration: underline
+}
+
+.assistant-empty {
+    min-height: 100%;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    padding: 24px;
+    color: #84918a;
+    text-align: center
+}
+
+.assistant-empty svg {
+    color: #6f9f89
+}
+
+.assistant-empty strong {
+    margin-top: 10px;
+    color: #46564e;
+    font-size: 13px
+}
+
+.assistant-empty p {
+    max-width: 220px;
+    margin: 6px 0 0;
+    font-size: 11px;
+    line-height: 1.55
+}
+
+.assistant-source-panel {
+    padding: 0 14px 12px
+}
+
+.assistant-source-panel label {
+    display: grid;
+    gap: 5px;
+    color: #68766f;
+    font-size: 10px;
+    font-weight: 700
+}
+
+.assistant-source-panel textarea {
+    width: 100%;
+    resize: vertical;
+    min-height: 116px;
+    max-height: 220px;
+    padding: 9px 10px;
+    border: 0;
+    border-radius: 7px;
+    background: #edf3ef;
+    color: #3f4d46;
+    font-size: 11px;
+    line-height: 1.55
+}
+
+.assistant-source-panel textarea:focus {
+    outline: 2px solid rgb(38 118 90 / 16%)
+}
+
+.assistant-composer {
+    padding: 0 14px 13px
+}
+
+.assistant-composer>textarea {
+    width: 100%;
+    resize: vertical;
+    min-height: 62px;
+    max-height: 150px;
+    padding: 9px 10px;
+    border: 1px solid #ccd7d1;
+    border-radius: 7px;
+    background: #fff;
+    color: #35423c;
+    font-size: 12px;
+    line-height: 1.5
+}
+
+.assistant-composer>textarea:focus {
+    outline: 2px solid rgb(38 118 90 / 16%);
+    border-color: #6fa28c
+}
+
+.assistant-model-form {
+    display: flex;
+    gap: 5px;
+    margin-top: 6px
+}
+
+.assistant-model-form select {
+    width: 70px;
+    height: 31px;
+    padding: 0 4px;
+    border: 1px solid #ccd7d1;
+    border-radius: 6px;
+    background: #fff;
+    color: #435149;
+    font-size: 10px
+}
+
+.assistant-model-form input {
+    min-width: 0;
+    flex: 1;
+    height: 31px;
+    padding: 0 8px;
+    border: 1px solid #ccd7d1;
+    border-radius: 6px;
+    color: #35423c;
+    font-size: 11px
+}
+
+.assistant-model-form button,
+.assistant-send {
+    width: 31px;
+    height: 31px;
+    display: grid;
+    place-items: center;
+    flex: 0 0 31px;
+    border: 1px solid #cbd6d0;
+    border-radius: 6px;
+    background: #fff;
+    color: #3e4b45
+}
+
+.assistant-model-form button:hover {
+    border-color: #8fb19f;
+    background: #eef6f2;
+    color: #176749
+}
+
+.assistant-composer-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 7px;
+    margin-top: 7px
+}
+
+.assistant-quick-actions,
+.assistant-composer-controls {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    min-width: 0
+}
+
+.assistant-quick-actions button {
+    height: 29px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0 6px;
+    border: 0;
+    border-radius: 5px;
+    background: transparent;
+    color: #5d6c64;
+    font-size: 10px
+}
+
+.assistant-quick-actions button:hover {
+    color: #176749;
+    background: #e8f3ed
+}
+
+.assistant-quick-actions button:disabled,
+.assistant-send:disabled {
+    opacity: .5;
+    cursor: default
+}
+
+.assistant-composer-controls select {
+    width: 92px;
+    height: 29px;
+    padding: 0 5px;
+    border: 0;
+    border-radius: 5px;
+    background: #edf3ef;
+    color: #435149;
+    font-size: 10px;
+    text-overflow: ellipsis
+}
+
+.assistant-composer-controls select:focus {
+    outline: 2px solid rgb(38 118 90 / 16%)
+}
+
+.assistant-send {
+    border-color: #26765a;
+    background: #26765a;
+    color: #fff
+}
+
+.assistant-send:hover {
+    background: #176749
+}
+
+.assistant-context-budget {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #718079
+}
+
+.assistant-context-ring {
+    --context-progress: 0%;
+    width: 27px;
+    height: 27px;
+    display: grid;
+    place-items: center;
+    position: relative;
+    flex: 0 0 27px;
+    border-radius: 50%;
+    background: conic-gradient(#26765a var(--context-progress), #dfe9e3 0)
+}
+
+.assistant-context-ring::before {
+    content: "";
+    position: absolute;
+    width: 21px;
+    height: 21px;
+    border-radius: 50%;
+    background: #f7f9f8
+}
+
+.assistant-context-ring span {
+    position: relative;
+    z-index: 1;
+    color: #26765a;
+    font-size: 7px;
+    font-weight: 700
+}
+
+.assistant-context-budget small {
+    font-size: 9px;
+    white-space: nowrap
+}
+
+.assistant-error {
+    margin: 6px 0 0;
+    color: #a04440;
+    font-size: 10px;
+    line-height: 1.4
+}
+
+:root[data-theme="dark"] .assistant-sidebar {
+    border-color: #39433f;
+    background: #222927
+}
+
+.assistant-sidebar-content {
+    background: #f7f9f8
+}
+
+:root[data-theme="dark"] .assistant-sidebar-content {
+    background: #1d2421
+}
+
+:root[data-theme="dark"] .assistant-sidebar-header {
+    border-color: #39433f
+}
+
+:root[data-theme="dark"] .assistant-sidebar-header h2,
+:root[data-theme="dark"] .assistant-message-content {
+    color: #dce5e0
+}
+
+:root[data-theme="dark"] .assistant-message.user .assistant-message-content {
+    background: #263b32;
+    color: #dce5e0
+}
+
+:root[data-theme="dark"] .assistant-source-panel textarea,
+:root[data-theme="dark"] .assistant-composer>textarea,
+:root[data-theme="dark"] .assistant-model-form input,
+:root[data-theme="dark"] .assistant-model-form select {
+    background: #242b28;
+    color: #dce5e0;
+    border-color: #46514c
+}
+
+:root[data-theme="dark"] .assistant-composer-controls select {
+    background: #28332e;
+    color: #dce5e0
+}
+
+:root[data-theme="dark"] .assistant-context-ring {
+    background: conic-gradient(#76c6a4 var(--context-progress), #35433d 0)
+}
+
+:root[data-theme="dark"] .assistant-context-ring::before {
+    background: #1d2421
+}
+
+:root[data-theme="dark"] .assistant-context-ring span {
+    color: #8bd4b5
+}

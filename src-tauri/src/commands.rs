@@ -1,0 +1,13 @@
+pub(crate) mod annotation_commands;
+pub(crate) mod document_commands;
+pub(crate) mod dto;
+pub(crate) mod export_commands;
+pub(crate) mod markdown_commands;
+pub(crate) mod llm_commands;
+pub(crate) mod mcp_commands;
+pub(crate) mod pdf_commands;
+pub(crate) mod pdf_storage_commands;
+pub(crate) mod persistence_commands;
+pub(crate) mod search_commands;
+pub(crate) mod settings_commands;
+pub(crate) mod translation_commands;
