@@ -1,0 +1,459 @@
+{
+  "commands": {
+    "apply_markdown_edits": {
+      "arguments": [
+        "session_id:String",
+        "base_revision:u64",
+        "edits:Vec<MarkdownEditDto>"
+      ],
+      "result": "->AppResult<MarkdownDocumentDto>"
+    },
+    "ask_llm": {
+      "arguments": [
+        "config:LlmConfigDto",
+        "request:LlmChatRequestDto",
+        "on_event:Channel<LlmStreamEventDto>"
+      ],
+      "result": "->AppResult<LlmChatResponseDto>"
+    },
+    "authenticate_pdf_document": {
+      "arguments": [
+        "session_id:String",
+        "password:String"
+      ],
+      "result": "->AppResult<PdfDocumentDto>"
+    },
+    "cancel_document_search": {
+      "arguments": [
+        "request:CancelSearchRequestDto"
+      ],
+      "result": "->AppResult<()>"
+    },
+    "clear_document_history": {
+      "arguments": [],
+      "result": "->AppResult<DocumentHistoryDto>"
+    },
+    "clear_untitled_markdown_recovery": {
+      "arguments": [],
+      "result": "->AppResult<()>"
+    },
+    "close_markdown_document": {
+      "arguments": [
+        "session_id:String"
+      ],
+      "result": "->AppResult<()>"
+    },
+    "close_pdf_document": {
+      "arguments": [
+        "session_id:String"
+      ],
+      "result": "->AppResult<()>"
+    },
+    "confirm_reopened_closed_document": {
+      "arguments": [
+        "path:String"
+      ],
+      "result": "->AppResult<DocumentHistoryDto>"
+    },
+    "create_markdown_document": {
+      "arguments": [
+        "path:String"
+      ],
+      "result": "->AppResult<()>"
+    },
+    "create_untitled_markdown_document": {
+      "arguments": [],
+      "result": "->AppResult<MarkdownDocumentDto>"
+    },
+    "detect_document_kind": {
+      "arguments": [
+        "path:String"
+      ],
+      "result": "->AppResult<DocumentKindDto>"
+    },
+    "export_annotations_markdown": {
+      "arguments": [
+        "document:ReaderDocumentDto",
+        "annotations:Vec<AnnotationDto>",
+        "settings:AppSettingsDto"
+      ],
+      "result": "->AppResult<String>"
+    },
+    "export_document_package": {
+      "arguments": [
+        "document_id:String",
+        "destination:String"
+      ],
+      "result": "->AppResult<String>"
+    },
+    "export_markdown_html": {
+      "arguments": [
+        "session_id:String",
+        "revision:u64",
+        "path:String"
+      ],
+      "result": "->AppResult<()>"
+    },
+    "export_markdown_pdf": {
+      "arguments": [
+        "session_id:String",
+        "revision:u64",
+        "path:String"
+      ],
+      "result": "->AppResult<()>"
+    },
+    "get_markdown_structure": {
+      "arguments": [
+        "session_id:String"
+      ],
+      "result": "->AppResult<MarkdownDocumentDto>"
+    },
+    "get_pdf_page_structure": {
+      "arguments": [
+        "session_id:String",
+        "page_index:u32"
+      ],
+      "result": "->AppResult<PdfPageStructureDto>"
+    },
+    "import_legacy_document_history": {
+      "arguments": [
+        "history:DocumentHistoryDto"
+      ],
+      "result": "->AppResult<DocumentHistoryDto>"
+    },
+    "inspect_document_relink": {
+      "arguments": [
+        "document_id:String",
+        "new_path:String"
+      ],
+      "result": "->AppResult<RelinkInspectionDto>"
+    },
+    "list_markdown_directory": {
+      "arguments": [
+        "path:String"
+      ],
+      "result": "->AppResult<Vec<MarkdownFileEntryDto>>"
+    },
+    "list_mcp_tools": {
+      "arguments": [],
+      "result": "->AppResult<Vec<McpToolDefinitionDto>>"
+    },
+    "list_supported_directory": {
+      "arguments": [
+        "path:String"
+      ],
+      "result": "->AppResult<Vec<MarkdownFileEntryDto>>"
+    },
+    "load_annotations": {
+      "arguments": [
+        "document_id:String",
+        "source_path:Option<String>",
+        "settings:AppSettingsDto"
+      ],
+      "result": "->AppResult<Vec<AnnotationDto>>"
+    },
+    "load_document_history": {
+      "arguments": [],
+      "result": "->AppResult<DocumentHistoryDto>"
+    },
+    "load_document_library": {
+      "arguments": [],
+      "result": "->AppResult<Vec<StoredDocumentEntryDto>>"
+    },
+    "load_pdf_bookmarks": {
+      "arguments": [
+        "document_id:String",
+        "source_path:Option<String>"
+      ],
+      "result": "->AppResult<Vec<PdfBookmarkDto>>"
+    },
+    "load_pdf_reading_state": {
+      "arguments": [
+        "document_id:String",
+        "source_path:Option<String>"
+      ],
+      "result": "->AppResult<Option<PdfReadingStateDto>>"
+    },
+    "load_settings": {
+      "arguments": [],
+      "result": "->AppResult<AppSettingsDto>"
+    },
+    "load_untitled_markdown_recovery": {
+      "arguments": [],
+      "result": "->AppResult<Option<String>>"
+    },
+    "load_workspace_state": {
+      "arguments": [],
+      "result": "->AppResult<WorkspaceStateDto>"
+    },
+    "migrate_pdf_annotations": {
+      "arguments": [
+        "from_document_id:String",
+        "to_document_id:String",
+        "settings:AppSettingsDto"
+      ],
+      "result": "->AppResult<()>"
+    },
+    "open_app_data_directory": {
+      "arguments": [],
+      "result": "->AppResult<()>"
+    },
+    "open_directory_in_file_manager": {
+      "arguments": [
+        "path:String"
+      ],
+      "result": "->AppResult<()>"
+    },
+    "open_external_url": {
+      "arguments": [
+        "url:String"
+      ],
+      "result": "->AppResult<()>"
+    },
+    "open_markdown_document": {
+      "arguments": [
+        "path:String"
+      ],
+      "result": "->AppResult<MarkdownDocumentDto>"
+    },
+    "open_pdf_document": {
+      "arguments": [
+        "path:String",
+        "password:Option<String>"
+      ],
+      "result": "->AppResult<PdfDocumentDto>"
+    },
+    "persist_pdf_document": {
+      "arguments": [
+        "session_id:String"
+      ],
+      "result": "->AppResult<()>"
+    },
+    "reconcile_document_storage": {
+      "arguments": [
+        "document_id:String"
+      ],
+      "result": "->AppResult<()>"
+    },
+    "record_document_accessed": {
+      "arguments": [
+        "document:ClosedDocumentInputDto"
+      ],
+      "result": "->AppResult<DocumentHistoryDto>"
+    },
+    "record_document_closed": {
+      "arguments": [
+        "document:ClosedDocumentInputDto"
+      ],
+      "result": "->AppResult<DocumentHistoryDto>"
+    },
+    "relink_document": {
+      "arguments": [
+        "document_id:String",
+        "new_path:String"
+      ],
+      "result": "->AppResult<StoredDocumentEntryDto>"
+    },
+    "rename_markdown_document": {
+      "arguments": [
+        "path:String",
+        "new_path:String"
+      ],
+      "result": "->AppResult<()>"
+    },
+    "rename_pdf_document": {
+      "arguments": [
+        "path:String",
+        "new_path:String"
+      ],
+      "result": "->AppResult<()>"
+    },
+    "render_pdf_page": {
+      "arguments": [
+        "session_id:String",
+        "page_index:u32",
+        "scale:f32"
+      ],
+      "result": "->AppResult<Response>"
+    },
+    "reveal_in_file_manager": {
+      "arguments": [
+        "path:String"
+      ],
+      "result": "->AppResult<()>"
+    },
+    "save_annotations": {
+      "arguments": [
+        "document_id:String",
+        "source_path:Option<String>",
+        "annotations:Vec<AnnotationDto>",
+        "settings:AppSettingsDto"
+      ],
+      "result": "->AppResult<()>"
+    },
+    "save_markdown_document": {
+      "arguments": [
+        "session_id:String",
+        "revision:u64"
+      ],
+      "result": "->AppResult<()>"
+    },
+    "save_markdown_document_as": {
+      "arguments": [
+        "session_id:String",
+        "revision:u64",
+        "path:String"
+      ],
+      "result": "->AppResult<MarkdownDocumentDto>"
+    },
+    "save_pdf_bookmarks": {
+      "arguments": [
+        "document_id:String",
+        "source_path:Option<String>",
+        "bookmarks:Vec<PdfBookmarkDto>"
+      ],
+      "result": "->AppResult<()>"
+    },
+    "save_pdf_reading_state": {
+      "arguments": [
+        "document_id:String",
+        "source_path:Option<String>",
+        "reading_state:PdfReadingStateDto"
+      ],
+      "result": "->AppResult<()>"
+    },
+    "save_settings": {
+      "arguments": [
+        "settings:AppSettingsDto"
+      ],
+      "result": "->AppResult<()>"
+    },
+    "save_untitled_markdown_recovery": {
+      "arguments": [
+        "content:String"
+      ],
+      "result": "->AppResult<()>"
+    },
+    "save_workspace_state": {
+      "arguments": [
+        "workspace:WorkspaceStateDto"
+      ],
+      "result": "->AppResult<()>"
+    },
+    "search_document": {
+      "arguments": [
+        "request:SearchRequestDto"
+      ],
+      "result": "->AppResult<SearchResponseDto>"
+    },
+    "test_llm_connection": {
+      "arguments": [
+        "config:LlmConfigDto"
+      ],
+      "result": "->AppResult<LlmConnectionStatusDto>"
+    },
+    "test_translation_connection": {
+      "arguments": [
+        "config:TranslationConfigDto"
+      ],
+      "result": "->AppResult<TranslationConnectionStatusDto>"
+    },
+    "translate_text": {
+      "arguments": [
+        "config:TranslationConfigDto",
+        "request:TranslationRequestDto"
+      ],
+      "result": "->AppResult<TranslationResultDto>"
+    }
+  },
+  "serialized_types": {
+    "AnnotationDto": "#[serde(rename_all=\"camelCase\")]id:String,document_id:String,document_title:String,#[serde(rename=\"type\")]annotation_type:String,page:Option<u32>,selected_text:String,note:String,#[serde(default,skip_serializing_if=\"is_false\")]has_note:bool,color:String,created_at:String,updated_at:String,rects:Option<Vec<AnnotationRectDto>>,#[serde(default,skip_serializing_if=\"Option::is_none\")]area_style:Option<AreaAnnotationStyleDto>",
+    "AnnotationRectDto": "#[serde(rename_all=\"camelCase\")]left:f64,top:f64,width:f64,height:f64",
+    "AppSettingsDto": "#[serde(rename_all=\"camelCase\")]annotation_storage_dir:Option<String>,export_dir:Option<String>,pdf_storage_dir:Option<String>,markdown_storage_dir:Option<String>,#[serde(default)]pdf_import_mode:DocumentImportModeDto,#[serde(default)]markdown_import_mode:DocumentImportModeDto,#[serde(default)]theme:ThemePreferenceDto,#[serde(default=\"default_true\")]animations_enabled:bool,#[serde(default=\"default_true\")]confirmation_reminders_enabled:bool,#[serde(default)]startup_behavior:StartupBehaviorDto,#[serde(default=\"default_pdf_workspace_layout\")]pdf_workspace_layout:WorkspacePanelLayoutDto,#[serde(default=\"default_markdown_workspace_layout\")]markdown_workspace_layout:WorkspacePanelLayoutDto,#[serde(default=\"default_translation_provider\")]translation_provider:String,#[serde(default=\"default_translation_api_url\")]translation_api_url:String,#[serde(default)]translation_api_key:String,#[serde(default)]translation_secret_id:String,#[serde(default)]translation_secret_key:String,#[serde(default=\"default_translation_target_language\")]translation_target_language:String,#[serde(default)]allow_third_party_translation:bool,#[serde(default=\"default_llm_base_url\",alias=\"localLlmBaseUrl\")]llm_base_url:String,#[serde(default=\"default_llm_model\",alias=\"localLlmModel\")]llm_model:String,#[serde(default,alias=\"localLlmApiKey\")]llm_api_key:String,#[serde(default=\"default_llm_timeout_seconds\",alias=\"localLlmTimeoutSeconds\")]llm_timeout_seconds:u64,#[serde(default=\"default_llm_temperature\",alias=\"localLlmTemperature\")]llm_temperature:f32",
+    "AreaAnnotationStyleDto": "#[serde(rename_all=\"camelCase\")]background_color:String,#[serde(default=\"default_area_opacity\")]opacity:f64,border_style:String,border_width:f64,radius:f64,rounded_corners:RoundedCornersDto",
+    "BaiduTranslateResponse": "from:Option<String>,trans_result:Option<Vec<BaiduTranslationItem>>,error_code:Option<String>,error_msg:Option<String>",
+    "BaiduTranslationItem": "dst:String",
+    "CancelSearchRequestDto": "#[serde(rename_all=\"camelCase\")]request_id:u64,target:SearchTargetDto",
+    "ClosedDocumentInputDto": "#[serde(rename_all=\"camelCase\")]#[serde(default)]document_id:Option<String>,path:String,title:String,kind:PersistedDocumentKindDto",
+    "DocumentAvailabilityDto": "#[serde(rename_all=\"camelCase\")]Available,Missing,Inaccessible,NotFile,#[default]Unknown",
+    "DocumentHistoryDto": "#[serde(rename_all=\"camelCase\")]recent:Vec<DocumentHistoryEntryDto>,closed:Vec<DocumentHistoryEntryDto>",
+    "DocumentHistoryEntryDto": "#[serde(rename_all=\"camelCase\")]#[serde(default)]document_id:Option<String>,path:String,title:String,kind:PersistedDocumentKindDto,last_closed_at:u64,#[serde(default)]availability:DocumentAvailabilityDto",
+    "DocumentImportModeDto": "#[serde(rename_all=\"camelCase\")]#[default]Copy,Link",
+    "DocumentKindDto": "#[serde(rename_all=\"camelCase\")]kind:&'staticstr",
+    "LlmChatRequestDto": "#[serde(rename_all=\"camelCase\")]messages:Vec<LlmMessageDto>,#[serde(default=\"default_temperature\")]temperature:f32",
+    "LlmChatResponseDto": "#[serde(rename_all=\"camelCase\")]content:String,model:String,prompt_tokens:Option<u64>,completion_tokens:Option<u64>,total_tokens:Option<u64>",
+    "LlmConfigDto": "#[serde(rename_all=\"camelCase\")]#[serde(default=\"default_base_url\")]base_url:String,#[serde(default=\"default_model\")]model:String,#[serde(default)]api_key:String,#[serde(default=\"default_timeout_seconds\")]timeout_seconds:u64",
+    "LlmConnectionStatusDto": "#[serde(rename_all=\"camelCase\")]provider:String,message:String",
+    "LlmMessageDto": "#[serde(rename_all=\"camelCase\")]role:LlmMessageRoleDto,content:String",
+    "LlmMessageRoleDto": "#[serde(rename_all=\"lowercase\")]System,User,Assistant",
+    "LlmStreamEventDto": "#[serde(tag=\"type\",rename_all=\"camelCase\")]Delta{content:String},Complete",
+    "MarkdownDiagnosticDto": "#[serde(rename_all=\"camelCase\")]severity:String,message:String,range:Option<SourceRangeDto>",
+    "MarkdownDocumentDto": "#[serde(rename_all=\"camelCase\")]document_id:String,session_id:String,revision:u64,path:String,title:String,source:String,nodes:Vec<MarkdownNodeDto>,outline:Vec<MarkdownOutlineNodeDto>,diagnostics:Vec<MarkdownDiagnosticDto>",
+    "MarkdownEditDto": "#[serde(rename_all=\"camelCase\")]start_utf16:usize,end_utf16:usize,text:String",
+    "MarkdownFileEntryDto": "#[serde(rename_all=\"camelCase\")]name:String,path:String,is_directory:bool,children:Vec<MarkdownFileEntryDto>",
+    "MarkdownNodeDto": "#[serde(rename_all=\"camelCase\")]id:String,range:SourceRangeDto,#[serde(flatten)]kind:MarkdownNodeKindDto",
+    "MarkdownNodeKindDto": "#[serde(tag=\"type\",rename_all=\"camelCase\")]Paragraph{children:Vec<MarkdownNodeDto>,},Heading{level:u8,children:Vec<MarkdownNodeDto>,},BlockQuote{children:Vec<MarkdownNodeDto>,},CodeBlock{language:Option<String>,children:Vec<MarkdownNodeDto>,},List{start:Option<u64>,children:Vec<MarkdownNodeDto>,},ListItem{children:Vec<MarkdownNodeDto>,},FootnoteDefinition{label:String,children:Vec<MarkdownNodeDto>,},DefinitionList{children:Vec<MarkdownNodeDto>,},DefinitionTitle{children:Vec<MarkdownNodeDto>,},Definition{children:Vec<MarkdownNodeDto>,},Table{alignments:Vec<String>,children:Vec<MarkdownNodeDto>,},TableHead{children:Vec<MarkdownNodeDto>,},TableRow{children:Vec<MarkdownNodeDto>,},TableCell{children:Vec<MarkdownNodeDto>,},Emphasis{children:Vec<MarkdownNodeDto>,},Strong{children:Vec<MarkdownNodeDto>,},Strikethrough{children:Vec<MarkdownNodeDto>,},Superscript{children:Vec<MarkdownNodeDto>,},Subscript{children:Vec<MarkdownNodeDto>,},Link{url:String,title:String,children:Vec<MarkdownNodeDto>,},Image{url:String,title:String,children:Vec<MarkdownNodeDto>,},Metadata{children:Vec<MarkdownNodeDto>,},Text{text:String,},InlineCode{text:String,},Html{text:String,},Math{text:String,display:bool,},FootnoteReference{label:String,},SoftBreak,HardBreak,Rule,TaskListMarker{checked:bool,}",
+    "MarkdownOutlineNodeDto": "#[serde(rename_all=\"camelCase\")]id:String,node_id:String,level:u8,title:String,children:Vec<MarkdownOutlineNodeDto>",
+    "McpToolDefinitionDto": "#[serde(rename_all=\"camelCase\")]name:String,description:String,input_schema:Value",
+    "PdfBookmarkDto": "#[serde(rename_all=\"camelCase\")]id:String,document_id:String,page:u32,x:f64,y:f64,title:String,#[serde(default=\"default_bookmark_color\")]color:String,created_at:String",
+    "PdfDocumentDto": "#[serde(rename_all=\"camelCase\")]document_id:String,session_id:String,path:String,source_path:String,title:String,page_count:u32,needs_password:bool,metadata:PdfMetadataDto,outline:Vec<PdfOutlineNodeDto>",
+    "PdfLinkDto": "#[serde(rename_all=\"camelCase\")]bounds:PdfRectDto,uri:String,target_page:Option<u32>,target_x:Option<f32>,target_y:Option<f32>",
+    "PdfMetadataDto": "#[serde(rename_all=\"camelCase\")]title:String,author:String,subject:String,keywords:String,creator:String,producer:String",
+    "PdfOutlineNodeDto": "#[serde(rename_all=\"camelCase\")]title:String,page:Option<u32>,x:Option<f32>,y:Option<f32>,uri:Option<String>,children:Vec<PdfOutlineNodeDto>",
+    "PdfPageStructureDto": "#[serde(rename_all=\"camelCase\")]page_index:u32,width:f32,height:f32,blocks:Vec<PdfTextBlockDto>,links:Vec<PdfLinkDto>",
+    "PdfReadingStateDto": "#[serde(rename_all=\"camelCase\")]page:u32,page_y:Option<f64>,zoom_mode:String,scale:f64,updated_at:String",
+    "PdfRectDto": "#[serde(rename_all=\"camelCase\")]left:f32,top:f32,right:f32,bottom:f32",
+    "PdfTextBlockDto": "#[serde(rename_all=\"camelCase\")]bounds:PdfRectDto,lines:Vec<PdfTextLineDto>",
+    "PdfTextLineDto": "#[serde(rename_all=\"camelCase\")]bounds:PdfRectDto,spans:Vec<PdfTextSpanDto>",
+    "PdfTextSpanDto": "#[serde(rename_all=\"camelCase\")]text:String,bounds:PdfRectDto,font_size:f32",
+    "PersistedDocumentKindDto": "#[serde(rename_all=\"lowercase\")]Pdf,Markdown",
+    "ReaderDocumentDto": "#[serde(rename_all=\"camelCase\")]id:String,title:String,path:String,kind:String",
+    "RelinkInspectionDto": "#[serde(rename_all=\"camelCase\")]recorded_name:String,selected_name:String,name_matches:bool",
+    "RoundedCornersDto": "#[serde(rename_all=\"camelCase\")]top_left:bool,top_right:bool,bottom_right:bool,bottom_left:bool",
+    "SearchLocatorDto": "#[serde(tag=\"kind\",rename_all=\"camelCase\")]Pdf{page:u32,#[serde(rename=\"pageY\")]page_y:f32,rects:Vec<SearchRectDto>,},Markdown{revision:u64,#[serde(rename=\"startUtf16\")]start_utf16:usize,#[serde(rename=\"endUtf16\")]end_utf16:usize,line:usize,column:usize,}",
+    "SearchMatchDto": "#[serde(rename_all=\"camelCase\")]id:String,matched_text:String,before_text:String,after_text:String,location_label:String,locator:SearchLocatorDto",
+    "SearchOptionsDto": "#[serde(rename_all=\"camelCase\",default)]case_sensitive:bool,whole_word:bool,result_limit:Option<usize>",
+    "SearchRectDto": "#[serde(rename_all=\"camelCase\")]left:f32,top:f32,width:f32,height:f32",
+    "SearchRequestDto": "#[serde(rename_all=\"camelCase\")]request_id:u64,target:SearchTargetDto,query:String,#[serde(default)]options:SearchOptionsDto",
+    "SearchResponseDto": "#[serde(rename_all=\"camelCase\")]request_id:u64,total:usize,truncated:bool,cancelled:bool,matches:Vec<SearchMatchDto>",
+    "SearchTargetDto": "#[serde(tag=\"kind\",rename_all=\"camelCase\")]Pdf{#[serde(rename=\"sessionId\")]session_id:String,},Markdown{#[serde(rename=\"sessionId\")]session_id:String,revision:u64,}",
+    "SourceRangeDto": "#[serde(rename_all=\"camelCase\")]start:usize,end:usize",
+    "StartupBehaviorDto": "#[serde(rename_all=\"camelCase\")]#[default]RestoreWorkspace,NewMarkdown,StartPage",
+    "StoredAnnotation": "#[serde(rename_all=\"camelCase\")]id:String,document_id:String,document_title:String,#[serde(rename=\"type\")]annotation_type:String,page:Option<u32>,selected_text:String,note:String,#[serde(default,skip_serializing_if=\"is_false\")]has_note:bool,color:String,created_at:String,updated_at:String,rects:Option<Vec<StoredAnnotationRect>>,#[serde(default,skip_serializing_if=\"Option::is_none\")]area_style:Option<StoredAreaAnnotationStyle>",
+    "StoredAnnotationDocument": "#[serde(rename_all=\"camelCase\")]schema_version:u32,updated_at:u64,annotations:Vec<StoredAnnotation>",
+    "StoredAnnotationPayload": "#[serde(untagged)]Versioned(StoredAnnotationDocument),Legacy(Vec<StoredAnnotation>)",
+    "StoredAnnotationRect": "#[serde(rename_all=\"camelCase\")]left:f64,top:f64,width:f64,height:f64",
+    "StoredAreaAnnotationStyle": "#[serde(rename_all=\"camelCase\")]background_color:String,#[serde(default=\"default_area_opacity\")]opacity:f64,border_style:String,border_width:f64,radius:f64,rounded_corners:StoredRoundedCorners",
+    "StoredDocumentEntryDto": "#[serde(rename_all=\"camelCase\")]id:String,title:String,kind:StoredDocumentKindDto,path:String,source_path:String,data_path:String,storage_mode:String,created_at:u64,updated_at:u64,last_opened_at:u64,path_available:bool,source_available:bool",
+    "StoredDocumentHistoryEntry": "#[serde(rename_all=\"camelCase\")]#[serde(default)]document_id:Option<String>,path:String,title:String,kind:StoredDocumentKind,last_closed_at:u64",
+    "StoredDocumentImportMode": "#[serde(rename_all=\"camelCase\")]#[default]Copy,Link",
+    "StoredDocumentKind": "#[serde(rename_all=\"lowercase\")]Pdf,Markdown",
+    "StoredDocumentKindDto": "#[serde(rename_all=\"lowercase\")]Pdf,Markdown",
+    "StoredDocumentLibrary": "#[serde(rename_all=\"camelCase\")]#[serde(default)]schema_version:u32,#[serde(default)]documents:Vec<StoredDocumentLibraryEntry>",
+    "StoredDocumentLibraryEntry": "#[serde(rename_all=\"camelCase\")]id:String,title:String,kind:StoredDocumentKind,path:String,source_path:String,#[serde(default)]data_path:String,#[serde(default=\"default_managed_copy\")]storage_mode:String,created_at:u64,updated_at:u64,last_opened_at:u64",
+    "StoredDocumentList": "#[serde(rename_all=\"camelCase\")]#[serde(default)]schema_version:u32,#[serde(default)]documents:Vec<StoredDocumentHistoryEntry>",
+    "StoredMarkdownMetadata": "#[serde(rename_all=\"camelCase\")]schema_version:u32,document_id:String,#[serde(rename=\"type\")]document_type:String,display_name:String,source_path:String,document_path:String,storage_mode:String,created_at:String,updated_at:String",
+    "StoredPdfBookmark": "#[serde(rename_all=\"camelCase\")]id:String,document_id:String,page:u32,x:f64,y:f64,title:String,#[serde(default=\"default_bookmark_color\")]color:String,created_at:String",
+    "StoredPdfMetadata": "#[serde(rename_all=\"camelCase\")]schema_version:u32,document_id:String,#[serde(rename=\"type\")]document_type:String,display_name:String,source_path:String,#[serde(default)]document_path:String,storage_mode:String,content_hash:String,created_at:String,updated_at:String",
+    "StoredPdfReadingState": "#[serde(rename_all=\"camelCase\")]page:u32,page_y:Option<f64>,zoom_mode:String,scale:f64,updated_at:String",
+    "StoredRoundedCorners": "#[serde(rename_all=\"camelCase\")]top_left:bool,top_right:bool,bottom_right:bool,bottom_left:bool",
+    "StoredSettings": "#[serde(rename_all=\"camelCase\")]#[serde(default)]schema_version:u32,#[serde(default)]annotation_storage_dir:Option<String>,#[serde(default)]export_dir:Option<String>,#[serde(default)]pdf_storage_dir:Option<String>,#[serde(default)]markdown_storage_dir:Option<String>,#[serde(default)]pdf_import_mode:StoredDocumentImportMode,#[serde(default)]markdown_import_mode:StoredDocumentImportMode,#[serde(default)]theme:StoredThemePreference,#[serde(default=\"default_true\")]animations_enabled:bool,#[serde(default=\"default_true\")]confirmation_reminders_enabled:bool,#[serde(default)]startup_behavior:StoredStartupBehavior,#[serde(default=\"default_pdf_workspace_layout\")]pdf_workspace_layout:StoredWorkspacePanelLayout,#[serde(default=\"default_markdown_workspace_layout\")]markdown_workspace_layout:StoredWorkspacePanelLayout,#[serde(default=\"default_translation_provider\")]translation_provider:String,#[serde(default=\"default_translation_api_url\")]translation_api_url:String,#[serde(default)]translation_api_key:String,#[serde(default)]translation_secret_id:String,#[serde(default)]translation_secret_key:String,#[serde(default=\"default_translation_target_language\")]translation_target_language:String,#[serde(default)]allow_third_party_translation:bool,#[serde(default=\"default_llm_base_url\",alias=\"localLlmBaseUrl\")]llm_base_url:String,#[serde(default=\"default_llm_model\",alias=\"localLlmModel\")]llm_model:String,#[serde(default,alias=\"localLlmApiKey\")]llm_api_key:String,#[serde(default=\"default_llm_timeout_seconds\",alias=\"localLlmTimeoutSeconds\")]llm_timeout_seconds:u64,#[serde(default=\"default_llm_temperature\",alias=\"localLlmTemperature\")]llm_temperature:f32",
+    "StoredStartupBehavior": "#[serde(rename_all=\"camelCase\")]#[default]RestoreWorkspace,NewMarkdown,StartPage",
+    "StoredThemePreference": "#[serde(rename_all=\"camelCase\")]#[default]System,Light,Dark",
+    "StoredWorkspaceDocument": "#[serde(rename_all=\"camelCase\")]path:String,kind:StoredDocumentKind",
+    "StoredWorkspacePanelLayout": "#[serde(rename_all=\"camelCase\")]left_width:u32,right_width:u32",
+    "StoredWorkspaceState": "#[serde(rename_all=\"camelCase\")]#[serde(default)]schema_version:u32,#[serde(default)]open_documents:Vec<StoredWorkspaceDocument>,#[serde(default)]active_document_path:Option<String>,#[serde(default)]folder_path:Option<String>",
+    "StreamChatChoice": "#[serde(default)]delta:StreamChatResponseDelta",
+    "StreamChatCompletionResponse": "#[serde(default)]model:String,#[serde(default)]choices:Vec<StreamChatChoice>,usage:Option<Usage>",
+    "StreamChatResponseDelta": "#[serde(default)]content:Option<String>",
+    "ThemePreferenceDto": "#[serde(rename_all=\"camelCase\")]#[default]System,Light,Dark",
+    "TranslationConfigDto": "#[serde(rename_all=\"camelCase\")]provider:String,api_url:String,app_id:String,secret_key:String,allow_third_party:bool",
+    "TranslationConnectionStatusDto": "#[serde(rename_all=\"camelCase\")]provider:String,message:String",
+    "TranslationRequestDto": "#[serde(rename_all=\"camelCase\")]text:String,source_language:String,target_language:String",
+    "TranslationResultDto": "#[serde(rename_all=\"camelCase\")]translated_text:String,detected_language:Option<String>,character_count:usize,usage_count:u64,provider:String",
+    "Usage": "prompt_tokens:Option<u64>,completion_tokens:Option<u64>,total_tokens:Option<u64>",
+    "WorkspaceDocumentDto": "#[serde(rename_all=\"camelCase\")]path:String,kind:PersistedDocumentKindDto",
+    "WorkspacePanelLayoutDto": "#[serde(rename_all=\"camelCase\")]left_width:u32,right_width:u32",
+    "WorkspaceStateDto": "#[serde(rename_all=\"camelCase\")]open_documents:Vec<WorkspaceDocumentDto>,active_document_path:Option<String>,folder_path:Option<String>"
+  }
+}

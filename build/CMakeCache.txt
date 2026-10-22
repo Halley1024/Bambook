@@ -290,7 +290,7 @@ mupdf-wrapper_BINARY_DIR:STATIC=D:/Projects/Bambook/build
 mupdf-wrapper_IS_TOP_LEVEL:STATIC=ON
 
 //Value Computed by CMake
-mupdf-wrapper_SOURCE_DIR:STATIC=D:/Projects/Bambook/src-tauri/native/mupdf-rs
+mupdf-wrapper_SOURCE_DIR:STATIC=D:/Projects/Bambook/backend/native/mupdf-rs
 
 
 ########################
@@ -381,7 +381,7 @@ CMAKE_GENERATOR_PLATFORM:INTERNAL=
 CMAKE_GENERATOR_TOOLSET:INTERNAL=
 //Source directory with the top level CMakeLists.txt file for this
 // project
-CMAKE_HOME_DIRECTORY:INTERNAL=D:/Projects/Bambook/src-tauri/native/mupdf-rs
+CMAKE_HOME_DIRECTORY:INTERNAL=D:/Projects/Bambook/backend/native/mupdf-rs
 //ADVANCED property for variable: CMAKE_LINKER
 CMAKE_LINKER-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_MAKE_PROGRAM

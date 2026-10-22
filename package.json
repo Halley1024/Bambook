@@ -7,9 +7,9 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "tauri": "tauri",
-    "tauri:dev": "set \"PATH=%USERPROFILE%\\.cargo\\bin;%PATH%\" && tauri dev",
-    "tauri:build:windows": "set \"PATH=%USERPROFILE%\\.cargo\\bin;%PATH%\" && tauri build --bundles nsis"
+    "tauri": "node scripts/tauri.mjs",
+    "tauri:dev": "node scripts/tauri.mjs dev",
+    "tauri:build:windows": "node scripts/tauri.mjs build --bundles nsis"
   },
   "dependencies": {
     "@tauri-apps/api": "^2.7.0",

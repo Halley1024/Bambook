@@ -1,0 +1,16 @@
+mod adapters;
+pub(crate) mod commands;
+mod dto;
+mod model;
+mod ports;
+mod service;
+pub(crate) use adapters::file_inspector::FileDocumentPathInspector;
+pub(crate) use adapters::json_repository::JsonDocumentHistoryRepository;
+pub(crate) use dto::ClosedDocumentInputDto;
+pub(crate) use dto::DocumentHistoryDto;
+pub(crate) use model::DocumentAvailability;
+pub(crate) use model::DocumentHistory;
+pub(crate) use model::DocumentHistoryEntry;
+pub(crate) use ports::document_history_repository::DocumentHistoryRepository;
+pub(crate) use ports::document_path_inspector::DocumentPathInspector;
+pub(crate) use service::DocumentHistoryService;

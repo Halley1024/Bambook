@@ -6,11 +6,11 @@ coverage/
 
 # Rust and Tauri outputs
 target/
-src-tauri/target/
-src-tauri/gen/
+backend/target/
+backend/gen/
 
 # Restorable native build tools
-src-tauri/native/libclang/
+backend/native/libclang/
 
 # Local runtime data and environment files
 storage/
@@ -38,3 +38,7 @@ desktop.ini
 
 # Local build-check directories
 .codex-build-check/
+
+
+# Log documents
+docs/logs/

@@ -1,0 +1,10 @@
+pub(crate) mod annotations;
+pub(crate) mod assistant;
+pub(crate) mod documents;
+pub(crate) mod history;
+pub(crate) mod library;
+pub(crate) mod markdown;
+pub(crate) mod pdf;
+pub(crate) mod search;
+pub(crate) mod settings;
+pub(crate) mod workspace;

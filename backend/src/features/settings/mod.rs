@@ -1,0 +1,15 @@
+mod adapters;
+pub(crate) mod commands;
+mod dto;
+mod model;
+mod ports;
+mod service;
+pub(crate) use adapters::json_repository::JsonSettingsRepository;
+pub(crate) use dto::AppSettingsDto;
+pub(crate) use model::AppSettings;
+pub(crate) use model::DocumentImportMode;
+pub(crate) use model::StartupBehavior;
+pub(crate) use model::ThemePreference;
+pub(crate) use model::WorkspacePanelLayout;
+pub(crate) use ports::settings_repository::SettingsRepository;
+pub(crate) use service::SettingsService;
