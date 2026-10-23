@@ -4,7 +4,7 @@
 
 ## 001 · 调用入口
 
-前端通用入口是 [invokeCommand](../../frontend/platform/tauriClient.ts)，其内部调用 Tauri `invoke`。业务 repository 管理具体命令和模型映射。Rust command 必须在 [app/ipc.rs](../../backend/src/app/ipc.rs) 的 `generate_handler!` 中注册。
+前端通用入口是 [invokeCommand](../../src/platform/tauriClient.ts)，其内部调用 Tauri `invoke`。业务 repository 管理具体命令和模型映射。Rust command 必须在 [app/ipc.rs](../../src-tauri/src/app/ipc.rs) 的 `generate_handler!` 中注册。
 
 当前没有自动生成的 TypeScript / Rust 协议绑定。`invokeCommand<TResult>` 的泛型只提供静态提示，不会在运行时验证响应。
 
@@ -36,7 +36,7 @@
 
 ## 004 · JSON 请求与响应
 
-以 [structuredMarkdownRepository](../../frontend/features/markdown/repositories/structuredMarkdownRepository.ts) 的编辑调用为例：
+以 [structuredMarkdownRepository](../../src/features/markdown/repositories/structuredMarkdownRepository.ts) 的编辑调用为例：
 
 ```ts
 const updated = await invokeCommand<StructuredMarkdownDocument>(
@@ -49,7 +49,7 @@ const updated = await invokeCommand<StructuredMarkdownDocument>(
 );
 ```
 
-响应包含 `documentId`、`sessionId`、`revision`、`path`、`title`、`source`、`nodes`、`outline` 和 `diagnostics`。参数和字段定义参见 [Markdown DTO](../../backend/src/features/markdown/dto.rs)。代码片段省略类型与函数导入。
+响应包含 `documentId`、`sessionId`、`revision`、`path`、`title`、`source`、`nodes`、`outline` 和 `diagnostics`。参数和字段定义参见 [Markdown DTO](../../src-tauri/src/features/markdown/dto.rs)。代码片段省略类型与函数导入。
 
 编辑区间使用 UTF-16 code unit，结束位置不包含在范围内。后端转换为 Rust UTF-8 字节位置并检查非法边界及重叠。不能使用 JavaScript 字符串长度直接解释 Rust 字节偏移。
 
@@ -57,7 +57,7 @@ const updated = await invokeCommand<StructuredMarkdownDocument>(
 
 请求对象包含 `requestId`、`target`、`query` 和 `options`。`target` 以 `kind` 区分：PDF 指定 `sessionId`；Markdown 还携带 `revision`。
 
-响应返回 `requestId`、`total`、`truncated`、`cancelled` 和 `matches`。PDF locator 包含页码、页内位置和矩形；Markdown locator 包含 revision、UTF-16 范围、行与列。字段以 [search_dto.rs](../../backend/src/features/search/dto.rs) 为准。
+响应返回 `requestId`、`total`、`truncated`、`cancelled` 和 `matches`。PDF locator 包含页码、页内位置和矩形；Markdown locator 包含 revision、UTF-16 范围、行与列。字段以 [search_dto.rs](../../src-tauri/src/features/search/dto.rs) 为准。
 
 取消接口用于使旧查询失效，前端仍需检查请求序号。搜索取消不表示通用的任务取消能力，PDF 页面渲染与模型请求没有因此自动获得取消协议。
 
@@ -75,7 +75,7 @@ const updated = await invokeCommand<StructuredMarkdownDocument>(
 
 ## 007 · 错误约定
 
-[AppError](../../backend/src/shared/error.rs) 在 Rust 内部是枚举，但序列化为字符串。前端目前通过 Promise rejection 和 `String(error)` 显示消息，没有统一的 `{ code, message, details }` 响应。
+[AppError](../../src-tauri/src/shared/error.rs) 在 Rust 内部是枚举，但序列化为字符串。前端目前通过 Promise rejection 和 `String(error)` 显示消息，没有统一的 `{ code, message, details }` 响应。
 
 新增稳定错误码属于后续协议迁移，需要同时修改后端序列化、前端判断和测试。当前不要依赖字符串中的某个英文片段作为长期业务分支。
 

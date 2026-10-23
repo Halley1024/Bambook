@@ -20,13 +20,13 @@
 
 ```text
 Bambook/
-├── frontend/
+├── src/
 │   ├── app/                    应用入口、Provider 组合与布局
 │   ├── features/               文档、PDF、Markdown、搜索、批注、设置等
 │   ├── components/             共享视图及助手面板
 │   ├── platform/               Tauri、窗口、对话框和服务调用适配
 │   └── shared/                 缓存、尺寸计算和公共工具
-├── backend/
+├── src-tauri/
 │   ├── src/
 │   │   ├── app/                启动、装配、IPC 注册与跨模块流程
 │   │   ├── features/           文档库、PDF、Markdown、搜索等功能模块

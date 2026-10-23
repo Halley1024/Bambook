@@ -14,7 +14,7 @@ On Windows hosts, `mupdf-sys/build.rs` automatically sets `LIBCLANG_PATH` to the
 To restore the directory on a new checkout when native binaries are not stored in source control:
 
 ```powershell
-python -m pip install libclang==18.1.1 --target backend/native/libclang --no-compile
+python -m pip install libclang==18.1.1 --target src-tauri/native/libclang --no-compile
 ```
 
 ## MuPDF
@@ -31,7 +31,7 @@ python -m pip install libclang==18.1.1 --target backend/native/libclang --no-com
 Required system components are Visual Studio 2022 C++ Build Tools and a Windows SDK. From the repository root:
 
 ```powershell
-cargo check --manifest-path backend/Cargo.toml
+cargo check --manifest-path src-tauri/Cargo.toml
 npm run tauri:build:windows
 ```
 

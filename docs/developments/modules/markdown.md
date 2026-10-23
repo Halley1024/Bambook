@@ -8,14 +8,14 @@ Markdown 模块管理源码输入、结构化解析、目录、搜索、保存�
 
 | 入口 | 用途 |
 | --- | --- |
-| [MarkdownWorkspaceProvider](../../../frontend/features/markdown/MarkdownWorkspaceProvider.tsx) | 编辑缓冲、同步队列、保存与撤销历史 |
-| [MarkdownEditor](../../../frontend/features/markdown/components/MarkdownEditor.tsx) | textarea 源码输入、选区与快捷键 |
-| [MarkdownSplitView](../../../frontend/features/markdown/components/MarkdownSplitView.tsx) | 源码、预览与分栏布局 |
-| [MarkdownAstRenderer](../../../frontend/features/markdown/components/MarkdownAstRenderer.tsx) | AST 节点的 React 渲染 |
-| [structuredMarkdownRepository](../../../frontend/features/markdown/repositories/structuredMarkdownRepository.ts) | 结构、编辑、保存和导出接口 |
-| [MarkdownDocumentService](../../../backend/src/features/markdown/service.rs) | 会话、revision、编辑应用与导出协调 |
-| [parser.rs](../../../backend/src/features/markdown/adapters/parser.rs) | pulldown-cmark 事件到项目 AST 的转换 |
-| [exporter.rs](../../../backend/src/features/markdown/adapters/exporter.rs) | 独立 HTML 与 PDF 导出链路 |
+| [MarkdownWorkspaceProvider](../../../src/features/markdown/MarkdownWorkspaceProvider.tsx) | 编辑缓冲、同步队列、保存与撤销历史 |
+| [MarkdownEditor](../../../src/features/markdown/components/MarkdownEditor.tsx) | textarea 源码输入、选区与快捷键 |
+| [MarkdownSplitView](../../../src/features/markdown/components/MarkdownSplitView.tsx) | 源码、预览与分栏布局 |
+| [MarkdownAstRenderer](../../../src/features/markdown/components/MarkdownAstRenderer.tsx) | AST 节点的 React 渲染 |
+| [structuredMarkdownRepository](../../../src/features/markdown/repositories/structuredMarkdownRepository.ts) | 结构、编辑、保存和导出接口 |
+| [MarkdownDocumentService](../../../src-tauri/src/features/markdown/service.rs) | 会话、revision、编辑应用与导出协调 |
+| [parser.rs](../../../src-tauri/src/features/markdown/adapters/parser.rs) | pulldown-cmark 事件到项目 AST 的转换 |
+| [exporter.rs](../../../src-tauri/src/features/markdown/adapters/exporter.rs) | 独立 HTML 与 PDF 导出链路 |
 
 ## 002 · 内容模型与版本
 

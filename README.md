@@ -46,10 +46,10 @@ PDF 保留原始版式，侧重阅读和批注；Markdown 侧重编辑、预览�
 MuPDF 从仓库内的源码编译并静态链接。Windows 缺少本地 libclang 时，可在项目根目录恢复：
 
 ```powershell
-python -m pip install libclang==18.1.1 --target backend/native/libclang --no-compile
+python -m pip install libclang==18.1.1 --target src-tauri/native/libclang --no-compile
 ```
 
-无需 `.cargo/config.toml`：Windows 上，MuPDF 构建脚本会自动使用 `backend/native/libclang/clang/native/libclang.dll`；本地 DLL 不存在时，使用系统 libclang 查找机制。Linux 使用系统 libclang。手动设置的 `LIBCLANG_PATH` 优先于自动查找。
+无需 `.cargo/config.toml`：Windows 上，MuPDF 构建脚本会自动使用 `src-tauri/native/libclang/clang/native/libclang.dll`；本地 DLL 不存在时，使用系统 libclang 查找机制。Linux 使用系统 libclang。手动设置的 `LIBCLANG_PATH` 优先于自动查找。
 
 Windows 的 C/C++ 编译器与 MSBuild 由构建依赖自动定位，需安装 Visual Studio 2022 Build Tools 的“使用 C++ 的桌面开发”组件及 Windows SDK。Rust 的 `cargo`、`rustc` 则需通过安装程序加入 `PATH`，默认目录为 `%USERPROFILE%\.cargo\bin`。
 
@@ -68,8 +68,8 @@ npm run tauri -- dev
 
 ```sh
 npm run build
-cargo check --manifest-path backend/Cargo.toml
-cargo test --manifest-path backend/Cargo.toml
+cargo check --manifest-path src-tauri/Cargo.toml
+cargo test --manifest-path src-tauri/Cargo.toml
 ```
 
 `npm run build` 执行 TypeScript 检查并构建前端；Cargo 命令检查和测试 Rust 后端。桌面交互与安装包仍需在目标平台验证。
@@ -82,9 +82,9 @@ cargo test --manifest-path backend/Cargo.toml
 npm run tauri -- build
 ```
 
-Tauri 会自动构建前端并合并对应平台配置：Windows 使用 `backend/tauri.windows.conf.json`，Linux 使用 `backend/tauri.linux.conf.json`。
+Tauri 会自动构建前端并合并对应平台配置：Windows 使用 `src-tauri/tauri.windows.conf.json`，Linux 使用 `src-tauri/tauri.linux.conf.json`。
 
-默认构建产物位于 `backend/target/release/bundle/`：
+默认构建产物位于 `src-tauri/target/release/bundle/`：
 
 - Windows：`nsis/` 下的安装程序。
 - Linux：`deb/` 和 `appimage/` 下的安装包。
@@ -93,7 +93,7 @@ Tauri 会自动构建前端并合并对应平台配置：Windows 使用 `backend
 
 详细业务规则、架构设计和开发说明参见[技术开发文档](docs/developments/README.md)。
 
-前端源码位于 `frontend/`，Rust/Tauri 工程位于 `backend/`，其中 Rust 源码仍使用标准的 `backend/src/`。package.json、Vite/TypeScript 配置与 index.html 保留在项目根目录。Tauri 命令统一通过 [启动脚本](scripts/tauri.mjs) 定位后端工程，原有 npm 使用方式保持不变。
+前端源码位于 `src/`，Rust/Tauri 工程位于 `src-tauri/`，其中 Rust 源码位于 `src-tauri/src/`。package.json、Vite/TypeScript 配置与 index.html 保留在项目根目录。npm 脚本直接调用 Tauri CLI，按默认目录约定定位后端工程。
 
 006 · 感谢
 

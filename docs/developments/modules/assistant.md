@@ -8,12 +8,12 @@
 
 | 入口 | 用途 |
 | --- | --- |
-| [AssistantSidebar](../../../frontend/components/ai/AssistantSidebar.tsx) | 上下文、模型选择、对话、快捷提问和流式显示 |
-| [PdfWorkspace](../../../frontend/features/pdf/PdfWorkspace.tsx) | 将 PDF 选中文字带入助手 |
-| [llmClient](../../../frontend/platform/llmClient.ts) | 组装请求和接收 Tauri Channel |
-| [llm_commands.rs](../../../backend/src/features/assistant/llm/commands.rs) | command 与流式事件转换 |
-| [LlmService](../../../backend/src/features/assistant/llm/service.rs) | 地址、消息和参数校验 |
-| [llm_provider.rs](../../../backend/src/features/assistant/llm/adapters/openai_compatible.rs) | HTTP 请求和 SSE 响应解析 |
+| [AssistantSidebar](../../../src/components/ai/AssistantSidebar.tsx) | 上下文、模型选择、对话、快捷提问和流式显示 |
+| [PdfWorkspace](../../../src/features/pdf/PdfWorkspace.tsx) | 将 PDF 选中文字带入助手 |
+| [llmClient](../../../src/platform/llmClient.ts) | 组装请求和接收 Tauri Channel |
+| [llm_commands.rs](../../../src-tauri/src/features/assistant/llm/commands.rs) | command 与流式事件转换 |
+| [LlmService](../../../src-tauri/src/features/assistant/llm/service.rs) | 地址、消息和参数校验 |
+| [llm_provider.rs](../../../src-tauri/src/features/assistant/llm/adapters/openai_compatible.rs) | HTTP 请求和 SSE 响应解析 |
 
 ## 002 · 问答流程
 

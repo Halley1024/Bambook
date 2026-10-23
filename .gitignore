@@ -6,11 +6,11 @@ coverage/
 
 # Rust and Tauri outputs
 target/
-backend/target/
-backend/gen/
+src-tauri/target/
+src-tauri/gen/
 
 # Restorable native build tools
-backend/native/libclang/
+src-tauri/native/libclang/
 
 # Local runtime data and environment files
 storage/

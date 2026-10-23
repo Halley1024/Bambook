@@ -8,12 +8,12 @@
 
 | 入口 | 用途 |
 | --- | --- |
-| [SettingsProvider](../../../frontend/features/settings/SettingsProvider.tsx) | 加载、内存更新、写入队列与界面状态 |
-| [types.ts](../../../frontend/features/settings/types.ts) | 前端设置类型和默认值 |
-| [SettingsPanel](../../../frontend/features/settings/components/SettingsPanel.tsx) | 配置界面及连接测试 |
-| [useWorkspacePanelWidths](../../../frontend/shared/useWorkspacePanelWidths.ts) | 侧栏拖动、折叠和尺寸计算 |
-| [SettingsService](../../../backend/src/features/settings/service.rs) | 用例入口 |
-| [JsonSettingsRepository](../../../backend/src/features/settings/adapters/json_repository.rs) | JSON、默认字段与版本迁移 |
+| [SettingsProvider](../../../src/features/settings/SettingsProvider.tsx) | 加载、内存更新、写入队列与界面状态 |
+| [types.ts](../../../src/features/settings/types.ts) | 前端设置类型和默认值 |
+| [SettingsPanel](../../../src/features/settings/components/SettingsPanel.tsx) | 配置界面及连接测试 |
+| [useWorkspacePanelWidths](../../../src/shared/useWorkspacePanelWidths.ts) | 侧栏拖动、折叠和尺寸计算 |
+| [SettingsService](../../../src-tauri/src/features/settings/service.rs) | 用例入口 |
+| [JsonSettingsRepository](../../../src-tauri/src/features/settings/adapters/json_repository.rs) | JSON、默认字段与版本迁移 |
 
 ## 002 · 设置分组
 

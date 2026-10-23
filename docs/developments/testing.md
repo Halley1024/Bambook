@@ -15,16 +15,16 @@
 ```sh
 python scripts/check_backend.py
 npm run build
-cargo check --manifest-path backend/Cargo.toml
-cargo test --manifest-path backend/Cargo.toml
+cargo check --manifest-path src-tauri/Cargo.toml
+cargo test --manifest-path src-tauri/Cargo.toml
 ```
 
 需要查看测试清单或缩小范围时：
 
 ```sh
-cargo test --manifest-path backend/Cargo.toml -- --list
-cargo test --manifest-path backend/Cargo.toml applies_javascript_utf16_ranges_without_splitting_unicode
-cargo test --manifest-path backend/Cargo.toml writes_real_html_and_pdf_files
+cargo test --manifest-path src-tauri/Cargo.toml -- --list
+cargo test --manifest-path src-tauri/Cargo.toml applies_javascript_utf16_ranges_without_splitting_unicode
+cargo test --manifest-path src-tauri/Cargo.toml writes_real_html_and_pdf_files
 ```
 
 名称过滤仍需要编译相应测试目标，并不绕过 MuPDF、Tauri 或 libclang 依赖。
@@ -33,15 +33,15 @@ cargo test --manifest-path backend/Cargo.toml writes_real_html_and_pdf_files
 
 | 范围 | 示例文件 | 验证内容 |
 | --- | --- | --- |
-| 应用用例 | [Markdown 服务](../../backend/src/features/markdown/service.rs) | UTF-16 区间与代理对边界 |
-| 历史记录 | [历史服务](../../backend/src/features/history/service.rs) | 排序、路径检查与恢复确认 |
-| PDF 引擎 | [MuPDF 引擎](../../backend/src/features/pdf/adapters/mupdf_engine.rs) | 打开、认证、提取与渲染 |
-| 搜索 | [normalizer](../../backend/src/features/search/normalizer.rs)、[matcher](../../backend/src/features/search/matcher.rs) | Unicode 标准化、匹配与映射 |
-| Markdown | [解析器](../../backend/src/features/markdown/adapters/parser.rs)、[导出器](../../backend/src/features/markdown/adapters/exporter.rs) | AST、链接过滤与实际文件生成 |
-| 存储 | [托管仓库](../../backend/src/features/library/adapters/local_storage/mod.rs) | 副本、链接、索引及文档包相关规则 |
-| 文件替换 | [atomic_file](../../backend/src/platform/filesystem/atomic_file.rs) | 生成失败时保留目标文件 |
-| 跨功能流程 | [workflow tests](../../backend/src/app/workflows/tests.rs) | PDF 失败清理、加密认证、Markdown 搜索保存重开 |
-| 协议 | [冻结协议清单](../../backend/tests/fixtures/backend-contract.json) | 部分字段序列化和输入转换 |
+| 应用用例 | [Markdown 服务](../../src-tauri/src/features/markdown/service.rs) | UTF-16 区间与代理对边界 |
+| 历史记录 | [历史服务](../../src-tauri/src/features/history/service.rs) | 排序、路径检查与恢复确认 |
+| PDF 引擎 | [MuPDF 引擎](../../src-tauri/src/features/pdf/adapters/mupdf_engine.rs) | 打开、认证、提取与渲染 |
+| 搜索 | [normalizer](../../src-tauri/src/features/search/normalizer.rs)、[matcher](../../src-tauri/src/features/search/matcher.rs) | Unicode 标准化、匹配与映射 |
+| Markdown | [解析器](../../src-tauri/src/features/markdown/adapters/parser.rs)、[导出器](../../src-tauri/src/features/markdown/adapters/exporter.rs) | AST、链接过滤与实际文件生成 |
+| 存储 | [托管仓库](../../src-tauri/src/features/library/adapters/local_storage/mod.rs) | 副本、链接、索引及文档包相关规则 |
+| 文件替换 | [atomic_file](../../src-tauri/src/platform/filesystem/atomic_file.rs) | 生成失败时保留目标文件 |
+| 跨功能流程 | [workflow tests](../../src-tauri/src/app/workflows/tests.rs) | PDF 失败清理、加密认证、Markdown 搜索保存重开 |
+| 协议 | [冻结协议清单](../../src-tauri/tests/fixtures/backend-contract.json) | 部分字段序列化和输入转换 |
 
 现有测试数量和实际执行结果以当前测试输出为准。Rust 层测试不能替代 Tauri 窗口、选区、滚动或安装包的人工验收。
 

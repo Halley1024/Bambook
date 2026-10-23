@@ -2,7 +2,7 @@
 
 [返回技术总览](README.md) · [后端职责与依赖](backend.md)
 
-日期：2026-10-22。范围：`backend/src` 的功能模块组织、依赖装配、跨模块用例、公共模块、相关文档与契约检查。维持单个 Cargo crate；没有调整依赖清单和原生 MuPDF 源码。
+日期：2026-10-22。范围：`src-tauri/src` 的功能模块组织、依赖装配、跨模块用例、公共模块、相关文档与契约检查。维持单个 Cargo crate；没有调整依赖清单和原生 MuPDF 源码。
 
 ## 001 · 重构前备份
 
@@ -19,8 +19,8 @@
 需要恢复时，先停止应用和构建进程，并确认以下临时保存目录不存在。在项目根目录执行：
 
 ```sh
-mv backend .codex-build-check/src-tauri-after-feature-refactor
-cp -a .codex-build-check/backups/src-tauri-20261022-before-feature-refactor backend
+mv src-tauri .codex-build-check/src-tauri-after-feature-refactor
+cp -a .codex-build-check/backups/src-tauri-20261022-before-feature-refactor src-tauri
 ```
 
 这是整个后端目录的恢复方式，会保留重构后的目录供比较。不要把旧源码直接覆盖合并进新目录，否则会同时保留两套模块。
@@ -30,7 +30,7 @@ cp -a .codex-build-check/backups/src-tauri-20261022-before-feature-refactor back
 功能内部的 `mod.rs` 声明并导出接口；实现子模块默认私有，供应用装配使用的构造类型显式导出。简单功能直接托管 `Arc<Service>`，没有为每个功能额外创建仅包装服务的 state 文件。Agent 目录保留未接入状态。
 
 ```text
-backend/src/
+src-tauri/src/
 ├── app/
 │   ├── workflows/
 │   │   ├── document_lifecycle.rs
@@ -284,7 +284,7 @@ backend/src/
 ## 004 · 保持的协议与资源约束
 
 - 58 个已注册 command 的名称、前端参数和返回类型保持兼容。新增的 Tauri State 注入不构成前端请求参数。
-- 对照原目录冻结的 88 个序列化类型，字段、类型与 serde 声明保持一致。清单位于 `backend/tests/fixtures/backend-contract.json`。
+- 对照原目录冻结的 88 个序列化类型，字段、类型与 serde 声明保持一致。清单位于 `src-tauri/tests/fixtures/backend-contract.json`。
 - PDF 展示与搜索仍由独立 MuPDF worker 承担。搜索注册失败清理展示会话；搜索关闭失败仍尝试关闭展示会话。
 - Markdown 编辑与搜索共享同一份 session store，保留 revision、UTF-16 定位和取消规则。
 - 维持文档库、批注、书签、阅读状态、设置、工作区和恢复文件的现有磁盘路径与格式。
@@ -299,9 +299,9 @@ backend/src/
 | 重构前 cargo check | 通过 |
 | 重构前 cargo test | 原有 68 项通过 |
 | `python scripts/check_backend.py` | 依赖边界通过；58 个 command、88 个序列化类型的声明与原目录匹配 |
-| `cargo check --manifest-path backend/Cargo.toml --offline` | 通过，无编译警告 |
-| `cargo test --manifest-path backend/Cargo.toml --offline` | 73 项通过：原有 68 项与新增 5 项流程测试 |
-| `cargo build --manifest-path backend/Cargo.toml --offline` | 通过 |
+| `cargo check --manifest-path src-tauri/Cargo.toml --offline` | 通过，无编译警告 |
+| `cargo test --manifest-path src-tauri/Cargo.toml --offline` | 73 项通过：原有 68 项与新增 5 项流程测试 |
+| `cargo build --manifest-path src-tauri/Cargo.toml --offline` | 通过 |
 | `npm run build` | TypeScript 检查与 Vite 生产构建通过 |
 | `git diff --check` | 通过 |
 
@@ -313,18 +313,18 @@ backend/src/
 
 ## 006 · 顶层目录重命名
 
-同日将顶层前端源码目录改为 `frontend/`，Tauri 工程改为 `backend/`。Rust 标准源码目录保留为 `backend/src/`；package.json、index.html、Vite 和 TypeScript 配置仍在项目根目录。
+顶层前端源码目录现为 `src/`，Tauri 工程为 `src-tauri/`，Rust 源码目录为 `src-tauri/src/`；package.json、index.html、Vite 和 TypeScript 配置仍在项目根目录。此前曾将顶层目录命名为 `frontend` 与 `backend`，现已恢复默认目录命名，并同步更新相关路径。
 
-已更新 HTML 入口、TypeScript include、Vite 忽略规则、Git 忽略规则、后端检查脚本、IDE 设置、已有 CMake 缓存中的工程目录名及全部开发文档链接。3352 个移动文件逐项核对，业务源码内容保持一致，仅原生依赖 README 更新了项目路径。历史备份保留原名。
+本次同步更新 HTML 入口、TypeScript include、Vite 忽略规则、Git 忽略规则、已有 CMake 缓存中的工程目录名及开发文档路径。3339 个移动文件逐项核对，业务源码内容保持一致，仅原生依赖 README 更新了项目路径。历史备份保留原名。
 
-新增 [Tauri 启动脚本](../../scripts/tauri.mjs)，明确指定后端工程位置和包含 package.json 的前端工具链目录，继续支持 `npm run tauri -- dev`。变量含义参见 [Tauri CLI 2.11.4 的路径实现](https://github.com/tauri-apps/tauri/blob/tauri-cli-v2.11.4/crates/tauri-cli/src/helpers/app_paths.rs)。
+此前用于指定工程路径的 Tauri 启动脚本已移除。npm 脚本直接调用 Tauri CLI，按默认目录约定定位 `src-tauri/`，继续支持 `npm run tauri -- dev`。
 
-移动后的构建缓存曾包含旧工程目录的绝对权限文件路径；已清理 tauri、tauri-plugin-dialog、tauri-plugin-fs 的缓存并重新生成。Linux 下验证结果：
+此前重命名后的构建缓存曾包含旧工程目录的绝对权限文件路径；当时清理了 tauri、tauri-plugin-dialog、tauri-plugin-fs 的缓存并重新生成。以下为此前 Linux 下的验证记录，命令路径按当前目录更新：
 
-- `cargo check --manifest-path backend/Cargo.toml --offline` 通过。
-- `cargo test --manifest-path backend/Cargo.toml --offline`：73 项通过。
-- `npm run build` 通过；Vite 在不监听端口的模式下成功转换 HTML 和 `/frontend/main.tsx`。
-- `CARGO_NET_OFFLINE=true npm run tauri -- build --debug --no-bundle` 通过，生成 `backend/target/debug/bambook`。
+- `cargo check --manifest-path src-tauri/Cargo.toml --offline` 通过。
+- `cargo test --manifest-path src-tauri/Cargo.toml --offline`：73 项通过。
+- `npm run build` 通过；Vite 在不监听端口的模式下成功转换 HTML 和 `/src/main.tsx`。
+- `CARGO_NET_OFFLINE=true npm run tauri -- build --debug --no-bundle` 通过，生成 `src-tauri/target/debug/bambook`。
 - 后端协议检查通过，所有开发文档的本地链接均可解析。
 
 本次仍未运行桌面窗口或生成安装包。

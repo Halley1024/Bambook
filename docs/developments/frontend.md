@@ -6,18 +6,18 @@
 
 | 目录 | 当前职责 | 新代码放置原则 |
 | --- | --- | --- |
-| `frontend/app/` | 应用壳、工具栏、工作区宿主、Provider 组合 | 组织跨业务布局，业务细节交给 feature |
-| `frontend/features/` | 文档、PDF、Markdown、批注、搜索、设置等 | 同一业务的组件、hooks、状态、类型和 repository 就近维护 |
-| `frontend/components/` | 菜单、标签、表单、提示、内容展示及助手 | 复用组件放在这里；助手目前仍包含服务调用和本地存储逻辑 |
-| `frontend/platform/` | Tauri invoke、对话框、窗口、剪贴板、服务客户端 | 集中适配桌面运行环境 |
-| `frontend/shared/` | LRU 缓存、尺寸管理和纯工具 | 避免反向依赖具体业务 |
-| `frontend/styles/` | 全局样式入口 | 业务样式尽量由所属 feature 管理 |
+| `src/app/` | 应用壳、工具栏、工作区宿主、Provider 组合 | 组织跨业务布局，业务细节交给 feature |
+| `src/features/` | 文档、PDF、Markdown、批注、搜索、设置等 | 同一业务的组件、hooks、状态、类型和 repository 就近维护 |
+| `src/components/` | 菜单、标签、表单、提示、内容展示及助手 | 复用组件放在这里；助手目前仍包含服务调用和本地存储逻辑 |
+| `src/platform/` | Tauri invoke、对话框、窗口、剪贴板、服务客户端 | 集中适配桌面运行环境 |
+| `src/shared/` | LRU 缓存、尺寸管理和纯工具 | 避免反向依赖具体业务 |
+| `src/styles/` | 全局样式入口 | 业务样式尽量由所属 feature 管理 |
 
 这是一套基于 feature 的组织方式，不要求每个模块拥有完全相同的子目录。业务目前存在跨 feature 引用，调整时应依据实际数据归属，而不是机械移动文件。
 
 ## 002 · 挂载与 Provider
 
-入口：[main.tsx](../../frontend/main.tsx) → [App.tsx](../../frontend/app/App.tsx) → [AppProviders.tsx](../../frontend/app/AppProviders.tsx)。
+入口：[main.tsx](../../src/main.tsx) → [App.tsx](../../src/app/App.tsx) → [AppProviders.tsx](../../src/app/AppProviders.tsx)。
 
 当前 Provider 从外到内为：
 
@@ -65,7 +65,7 @@ NotificationProvider
 
 ## 005 · 工作区与扩展
 
-[WorkspaceHost.tsx](../../frontend/app/layout/WorkspaceHost.tsx) 根据活动文档选择 PDF / Markdown 工作区，无活动文档时显示开始页或文件夹工作区。两个业务 Provider 都在应用树内，页面切换不等于服务或会话已经释放。
+[WorkspaceHost.tsx](../../src/app/layout/WorkspaceHost.tsx) 根据活动文档选择 PDF / Markdown 工作区，无活动文档时显示开始页或文件夹工作区。两个业务 Provider 都在应用树内，页面切换不等于服务或会话已经释放。
 
 新增业务交互时：
 

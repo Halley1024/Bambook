@@ -8,7 +8,7 @@ Rust 后端在单个 crate 内按功能组织。`app` 负责启动、装配和�
 
 | 模块 | 入口与职责 |
 | --- | --- |
-| `app` | [bootstrap](../../backend/src/app/bootstrap.rs) 启动；[wiring](../../backend/src/app/wiring.rs) 装配；[ipc](../../backend/src/app/ipc.rs) 注册 commands；[workflows](../../backend/src/app/workflows/) 协调跨功能流程 |
+| `app` | [bootstrap](../../src-tauri/src/app/bootstrap.rs) 启动；[wiring](../../src-tauri/src/app/wiring.rs) 装配；[ipc](../../src-tauri/src/app/ipc.rs) 注册 commands；[workflows](../../src-tauri/src/app/workflows/) 协调跨功能流程 |
 | `documents` | 文件签名与扩展名识别、目录浏览、文件重命名；不维护编辑或渲染会话 |
 | `library` | 文档身份、托管副本与链接、索引、重新关联、文档包与旧存储迁移 |
 | `pdf` | MuPDF 展示与搜索适配器、页面模型、书签、阅读状态及其 JSON 格式 |
@@ -27,7 +27,7 @@ Rust 后端在单个 crate 内按功能组织。`app` 负责启动、装配和�
 
 ## 002 · 依赖装配
 
-[AppState::new](../../backend/src/app/wiring.rs) 创建基础 `AppPaths` 与文档库 `LibraryPaths`，初始化同一份 `LocalLibraryRepository`，然后将 `Arc` 注入各服务。`AppState::register` 托管各功能服务及应用协调状态。
+[AppState::new](../../src-tauri/src/app/wiring.rs) 创建基础 `AppPaths` 与文档库 `LibraryPaths`，初始化同一份 `LocalLibraryRepository`，然后将 `Arc` 注入各服务。`AppState::register` 托管各功能服务及应用协调状态。
 
 | 使用方 | 注入内容 |
 | --- | --- |
@@ -44,15 +44,15 @@ PDF 展示与搜索仍使用不同 MuPDF 实例和 worker，避免长搜索阻�
 
 ## 003 · 跨功能流程
 
-- [pdf_lifecycle](../../backend/src/app/workflows/pdf_lifecycle.rs)：打开、认证、关闭、持久化；搜索注册失败时清理已打开的展示会话。关闭搜索失败时仍尝试关闭展示会话。
-- [document_lifecycle](../../backend/src/app/workflows/document_lifecycle.rs)：Markdown 托管路径准备、打开、保存入库、另存、关闭搜索状态，以及存储方式协调。
-- [history](../../backend/src/app/workflows/history.rs)：组合文档库与历史信息，文档包导出后登记历史。
+- [pdf_lifecycle](../../src-tauri/src/app/workflows/pdf_lifecycle.rs)：打开、认证、关闭、持久化；搜索注册失败时清理已打开的展示会话。关闭搜索失败时仍尝试关闭展示会话。
+- [document_lifecycle](../../src-tauri/src/app/workflows/document_lifecycle.rs)：Markdown 托管路径准备、打开、保存入库、另存、关闭搜索状态，以及存储方式协调。
+- [history](../../src-tauri/src/app/workflows/history.rs)：组合文档库与历史信息，文档包导出后登记历史。
 
 文件重命名仍保持既有协议与行为：由 documents service 校验后调用文件适配器 rename。本轮没有扩展为同步改写所有历史、会话和索引的事务。
 
 ## 004 · 并发与持久化
 
-同步解析、渲染和磁盘操作在 blocking 任务中运行；公共调度入口是 [run_blocking](../../backend/src/platform/tasks.rs)，部分功能 command 保留原有直接调度。Reqwest 网络操作继续异步执行。
+同步解析、渲染和磁盘操作在 blocking 任务中运行；公共调度入口是 [run_blocking](../../src-tauri/src/platform/tasks.rs)，部分功能 command 保留原有直接调度。Reqwest 网络操作继续异步执行。
 
 MuPDF `Document` 留在专属 worker 内，前端不接收第三方句柄。发送 Close 不代表已等待线程退出，也不保证可以中断正在执行的单页渲染。
 

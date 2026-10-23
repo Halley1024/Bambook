@@ -4,7 +4,7 @@
 
 ## 001 · 数据根目录
 
-[bootstrap.rs](../../backend/src/app/bootstrap.rs) 使用 Tauri `local_data_dir()` 再追加 `Bambook`，由 [AppPaths](../../backend/src/platform/paths.rs) 提供基础路径，由 [LibraryPaths](../../backend/src/features/library/paths.rs) 派生托管布局。Windows 对应 `%LOCALAPPDATA%\Bambook`；Linux 使用系统解析出的本地数据目录，不写死 Windows 路径。
+[bootstrap.rs](../../src-tauri/src/app/bootstrap.rs) 使用 Tauri `local_data_dir()` 再追加 `Bambook`，由 [AppPaths](../../src-tauri/src/platform/paths.rs) 提供基础路径，由 [LibraryPaths](../../src-tauri/src/features/library/paths.rs) 派生托管布局。Windows 对应 `%LOCALAPPDATA%\Bambook`；Linux 使用系统解析出的本地数据目录，不写死 Windows 路径。
 
 下图是逻辑布局，文档子目录及部分文件按需要产生，不会在每次打开时全部创建：
 
@@ -49,7 +49,7 @@ PDF 与 Markdown 可配置各自存储根目录，批注还保留独立目录配
 
 ## 003 · 打开与入库
 
-[LocalLibraryRepository](../../backend/src/features/library/adapters/local_storage/mod.rs) 区分 `prepare_pdf` / `prepare_markdown` 与 `persist_pdf` / `persist_markdown`。
+[LocalLibraryRepository](../../src-tauri/src/features/library/adapters/local_storage/mod.rs) 区分 `prepare_pdf` / `prepare_markdown` 与 `persist_pdf` / `persist_markdown`。
 
 准备阶段规范化路径、查询已有记录并返回打开路径；对于未入库外部文件，不为它立即创建完整文档目录。首次显式保存再根据设置复制文件或记录链接，并写 metadata 和文档库索引。
 
@@ -64,7 +64,7 @@ PDF 与 Markdown 可配置各自存储根目录，批注还保留独立目录配
 
 ### 批注
 
-[JsonAnnotationRepository](../../backend/src/features/annotations/adapters/json_repository.rs) 当前写入 `schemaVersion: 4`，根对象包含 `updatedAt` 和 `annotations`，同时兼容旧数组载荷。
+[JsonAnnotationRepository](../../src-tauri/src/features/annotations/adapters/json_repository.rs) 当前写入 `schemaVersion: 4`，根对象包含 `updatedAt` 和 `annotations`，同时兼容旧数组载荷。
 
 读取候选来自来源文件所在目录的 `annotations.json`、配置或索引确定的托管批注文件，以及旧存储位置。各位置主文件读取失败时尝试 `.bak`，再按候选 `updatedAt` 选择较新数据；旧数组使用文件修改时间。
 
@@ -80,7 +80,7 @@ PDF 与 Markdown 可配置各自存储根目录，批注还保留独立目录配
 
 ## 005 · 原子写入与恢复边界
 
-[atomic_file.rs](../../backend/src/platform/filesystem/atomic_file.rs) 的步骤是：同目录创建唯一临时文件 → 写入 → `sync_all` → 替换目标。Windows 使用 `MoveFileExW`，其他平台使用 rename 并同步父目录；guard 尽力清理残留临时文件。
+[atomic_file.rs](../../src-tauri/src/platform/filesystem/atomic_file.rs) 的步骤是：同目录创建唯一临时文件 → 写入 → `sync_all` → 替换目标。Windows 使用 `MoveFileExW`，其他平台使用 rename 并同步父目录；guard 尽力清理残留临时文件。
 
 这保护单文件生成和替换过程，不提供跨 metadata、索引和内容的整体事务。替换后的同步失败也不能解释为“磁盘一定保留旧版本”。
 

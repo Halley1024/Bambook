@@ -8,7 +8,7 @@ export default defineConfig({
     port: 1420,
     strictPort: true,
     watch: {
-      ignored: ["**/backend/**", "**/.codex-build-check/**"],
+      ignored: ["**/src-tauri/**", "**/.codex-build-check/**"],
     },
   },
   envPrefix: ["VITE_", "TAURI_"],

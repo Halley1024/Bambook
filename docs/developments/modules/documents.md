@@ -8,14 +8,14 @@
 
 | 入口 | 用途 |
 | --- | --- |
-| [DocumentWorkspaceProvider](../../../frontend/features/documents/DocumentWorkspaceProvider.tsx) | 文档操作、dirty 状态、生命周期注册和工作区恢复 |
-| [useWorkspaceTabs](../../../frontend/features/documents/hooks/useWorkspaceTabs.ts) | 标签列表与活动标签状态 |
-| [closeCoordinator](../../../frontend/features/documents/close/closeCoordinator.ts) | 批量关闭的准备、提交和释放 |
-| [StartWorkspace](../../../frontend/features/documents/components/StartWorkspace.tsx) | 最近访问和文档库 |
-| [DocumentHistoryProvider](../../../frontend/features/documents/DocumentHistoryProvider.tsx) | 历史加载、刷新和操作 |
-| [AppShell](../../../frontend/app/layout/AppShell.tsx) | 系统窗口关闭事件接入 |
-| [DocumentService](../../../backend/src/features/documents/service.rs) | 文件识别、目录读取与文件重命名 |
-| [DocumentHistoryService](../../../backend/src/features/history/service.rs) | 历史排序、路径状态和关闭栈 |
+| [DocumentWorkspaceProvider](../../../src/features/documents/DocumentWorkspaceProvider.tsx) | 文档操作、dirty 状态、生命周期注册和工作区恢复 |
+| [useWorkspaceTabs](../../../src/features/documents/hooks/useWorkspaceTabs.ts) | 标签列表与活动标签状态 |
+| [closeCoordinator](../../../src/features/documents/close/closeCoordinator.ts) | 批量关闭的准备、提交和释放 |
+| [StartWorkspace](../../../src/features/documents/components/StartWorkspace.tsx) | 最近访问和文档库 |
+| [DocumentHistoryProvider](../../../src/features/documents/DocumentHistoryProvider.tsx) | 历史加载、刷新和操作 |
+| [AppShell](../../../src/app/layout/AppShell.tsx) | 系统窗口关闭事件接入 |
+| [DocumentService](../../../src-tauri/src/features/documents/service.rs) | 文件识别、目录读取与文件重命名 |
+| [DocumentHistoryService](../../../src-tauri/src/features/history/service.rs) | 历史排序、路径状态和关闭栈 |
 
 ## 002 · 核心模型
 

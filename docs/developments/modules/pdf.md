@@ -8,14 +8,14 @@ PDF 模块负责原貌阅读、文字定位、导航及应用附属数据。PDF 
 
 | 入口 | 用途 |
 | --- | --- |
-| [PdfWorkspaceProvider](../../../frontend/features/pdf/PdfWorkspaceProvider.tsx) | 阅读状态、导航、标记与生命周期协调 |
-| [PdfReader](../../../frontend/features/pdf/components/PdfReader.tsx) | 页面组织、可见范围与交互 |
-| [PdfPage](../../../frontend/features/pdf/components/PdfPage.tsx) | 页面位图、文字层、批注和书签覆盖 |
-| [mupdfRepository](../../../frontend/features/pdf/repositories/mupdfRepository.ts) | 页面请求、去重和 LRU 缓存 |
-| [PdfDocumentService](../../../backend/src/features/pdf/service.rs) | 会话与托管身份协调 |
-| [MupdfPdfEngine](../../../backend/src/features/pdf/adapters/mupdf_engine.rs) | 专属 worker 中打开、认证、提取和渲染 |
-| [MupdfPdfSearchEngine](../../../backend/src/features/pdf/adapters/mupdf_search.rs) | 独立文字索引与搜索 worker |
-| [useAnnotations](../../../frontend/features/annotations/hooks/useAnnotations.ts) | 批注编辑、历史与保存 |
+| [PdfWorkspaceProvider](../../../src/features/pdf/PdfWorkspaceProvider.tsx) | 阅读状态、导航、标记与生命周期协调 |
+| [PdfReader](../../../src/features/pdf/components/PdfReader.tsx) | 页面组织、可见范围与交互 |
+| [PdfPage](../../../src/features/pdf/components/PdfPage.tsx) | 页面位图、文字层、批注和书签覆盖 |
+| [mupdfRepository](../../../src/features/pdf/repositories/mupdfRepository.ts) | 页面请求、去重和 LRU 缓存 |
+| [PdfDocumentService](../../../src-tauri/src/features/pdf/service.rs) | 会话与托管身份协调 |
+| [MupdfPdfEngine](../../../src-tauri/src/features/pdf/adapters/mupdf_engine.rs) | 专属 worker 中打开、认证、提取和渲染 |
+| [MupdfPdfSearchEngine](../../../src-tauri/src/features/pdf/adapters/mupdf_search.rs) | 独立文字索引与搜索 worker |
+| [useAnnotations](../../../src/features/annotations/hooks/useAnnotations.ts) | 批注编辑、历史与保存 |
 
 ## 002 · 文档、结构与图像
 

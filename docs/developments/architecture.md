@@ -31,11 +31,11 @@ flowchart TD
 
 ## 003 · 启动流程
 
-1. Rust [main.rs](../../backend/src/main.rs) 调用库入口，随后进入 [bootstrap.rs](../../backend/src/app/bootstrap.rs)。
+1. Rust [main.rs](../../src-tauri/src/main.rs) 调用库入口，随后进入 [bootstrap.rs](../../src-tauri/src/app/bootstrap.rs)。
 2. Tauri 注册对话框插件，通过 `local_data_dir().join("Bambook")` 得到数据根目录。
-3. [AppState::new](../../backend/src/app/wiring.rs) 创建基础路径和文档库路径、初始化存储，并装配各功能服务与适配器。
+3. [AppState::new](../../src-tauri/src/app/wiring.rs) 创建基础路径和文档库路径、初始化存储，并装配各功能服务与适配器。
 4. `app/ipc.rs` 集中注册 commands；功能 command 获取本模块服务，应用 command 获取协调状态。未注册的函数不构成可用 IPC。
-5. 前端 [main.tsx](../../frontend/main.tsx) 挂载应用，[AppProviders](../../frontend/app/AppProviders.tsx) 组合通知、设置、文档和两个业务工作区的 Provider。
+5. 前端 [main.tsx](../../src/main.tsx) 挂载应用，[AppProviders](../../src/app/AppProviders.tsx) 组合通知、设置、文档和两个业务工作区的 Provider。
 6. 设置加载后，文档工作区按启动设置恢复磁盘文档、创建 Markdown 或展示开始页。
 
 ## 004 · 运行时状态
@@ -55,7 +55,7 @@ flowchart TD
 
 ### 打开与显示
 
-文件选择或拖放进入文档工作区，后端识别类型，再调用 PDF 或 Markdown 打开接口。前端将返回数据映射为 `ReaderDocument`，由 [WorkspaceHost](../../frontend/app/layout/WorkspaceHost.tsx) 按 `kind` 展示对应工作区。
+文件选择或拖放进入文档工作区，后端识别类型，再调用 PDF 或 Markdown 打开接口。前端将返回数据映射为 `ReaderDocument`，由 [WorkspaceHost](../../src/app/layout/WorkspaceHost.tsx) 按 `kind` 展示对应工作区。
 
 PDF 页面结构与位图分开请求；Markdown 打开即返回源码、AST 和目录。打开外部文档的准备阶段与首次保存入库分开，详见[存储设计](storage.md)。
 
