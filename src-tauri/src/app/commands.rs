@@ -12,7 +12,7 @@ pub(crate) async fn open_pdf_document(
     path: String,
     password: Option<String>,
 ) -> AppResult<PdfDocumentDto> {
-    let state = state.inner().clone();
+    let state = state.inner().clone(); // 将里面的状态信息取出
     run_blocking(move || {
         workflows::pdf_lifecycle::open(&state, &path, password.as_deref()).map(Into::into)
     })
