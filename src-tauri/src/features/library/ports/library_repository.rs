@@ -4,6 +4,9 @@ use crate::features::library::StorageLayout;
 use crate::features::library::StoredDocumentEntry;
 use crate::shared::error::AppResult;
 
+/**
+ * 文档库仓库
+ */
 pub(crate) trait LibraryRepository: Send + Sync {
     fn initialize(&self) -> AppResult<StorageLayout>;
     fn layout(&self) -> StorageLayout;

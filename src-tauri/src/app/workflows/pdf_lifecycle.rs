@@ -2,13 +2,14 @@ use crate::app::state::AppState;
 use crate::features::pdf::PdfDocumentModel;
 use crate::shared::error::AppResult;
 
+// 打开文件操作
 pub(crate) fn open(
     state: &AppState,
     path: &str,
     password: Option<&str>,
 ) -> AppResult<PdfDocumentModel> {
-    let settings = state.settings.load()?;
-    let document = state.pdf_documents.open(path, password, &settings)?;
+    let settings = state.settings.load()?;  // app 的设置信息
+    let document = state.pdf_documents.open(path, password, &settings)?;    // 通过AppState状态信息，打开pdf文件
     if let Err(error) = state
         .search
         .register_pdf(&document.session_id, &document.path, password)

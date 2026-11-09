@@ -28,6 +28,7 @@ impl OpenAiCompatibleLlmClient {
     }
 }
 
+// 实现兼容openAi接口的大模型客户端
 impl LlmClient for OpenAiCompatibleLlmClient {
     fn id(&self) -> &'static str {
         "OpenAI-compatible"

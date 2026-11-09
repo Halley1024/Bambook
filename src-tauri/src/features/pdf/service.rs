@@ -14,8 +14,8 @@ use crate::shared::error::AppResult;
 
 pub(crate) struct PdfDocumentService {
     engine: Arc<dyn PdfEngine>, // 这里通过<dyn PdfEngine> 实现动态隔离底层insfratructure的实现
-    library: Arc<LibraryService>,
-    managed_documents: Mutex<HashMap<String, ManagedPdfDocument>>,
+    library: Arc<LibraryService>, // 文档仓库
+    managed_documents: Mutex<HashMap<String, ManagedPdfDocument>>, // 管理文档，这里定义了一个HashMap，key是session_id，value是ManagedPdfDocument
 }
 
 impl PdfDocumentService {

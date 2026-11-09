@@ -6,6 +6,11 @@ use crate::platform::tasks::run_blocking;
 use crate::shared::error::AppResult;
 use tauri::State;
 
+/// 使用tauri::command注册命令，open_pdf_document用于打开PDF
+/// params:
+/// state: State<'_, AppState>, 应用程序的全局状态信息
+/// path: String 输入一个路径，主要是app.path().local_data_dir()
+/// password: Option<String> 因为有的PDF没有上锁，所以密码可能为空，使用Option进行包裹
 #[tauri::command]
 pub(crate) async fn open_pdf_document(
     state: State<'_, AppState>,
