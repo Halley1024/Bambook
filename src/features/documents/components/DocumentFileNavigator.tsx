@@ -1,4 +1,4 @@
-import { ChevronDown, FileText, FolderTree, Library, Link2Off, RefreshCw } from "lucide-react";
+import { ChevronDown, FileText, FolderOpen, FolderTree, Library, Link2Off, RefreshCw } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { selectFilePath } from "../../../platform/fileDialog";
@@ -21,9 +21,10 @@ type RelinkConfirmation = {
   selectedName: string;
 };
 
-export function DocumentFileNavigator() {
+export function DocumentFileNavigator({ directoryOnly = false }: { directoryOnly?: boolean }) {
   const workspace = useDocumentWorkspace();
   const notification = useNotification();
+  const navigationMode = directoryOnly ? "directory" : workspace.fileNavigationMode;
   const document = workspace.activeDocument;
   const untitled = Boolean(document?.kind === "markdown" && !document.path);
   const [library, setLibrary] = useState<StoredDocument[]>([]);
@@ -73,7 +74,7 @@ export function DocumentFileNavigator() {
   }, [document, requiresRelink, workspace.setDocumentDirty]);
 
   useEffect(() => {
-    if ((!document && !workspace.folderPath) || untitled || workspace.fileNavigationMode !== "directory" || workspace.folderPath || sourceUnavailable || !directoryRoot) {
+    if ((!document && !workspace.folderPath) || untitled || navigationMode !== "directory" || workspace.folderPath || sourceUnavailable || !directoryRoot) {
       setDirectoryEntries([]);
       setDirectoryLoading(false);
       return;
@@ -85,10 +86,11 @@ export function DocumentFileNavigator() {
       .catch(() => { if (!cancelled) setDirectoryEntries([]); })
       .finally(() => { if (!cancelled) setDirectoryLoading(false); });
     return () => { cancelled = true; };
-  }, [directoryRoot, document, sourceUnavailable, untitled, workspace.fileNavigationMode, workspace.folderPath]);
+  }, [directoryRoot, document, sourceUnavailable, untitled, navigationMode, workspace.folderPath]);
 
-  if (!document && !workspace.folderPath) return <NavigatorEmpty message="打开文档后显示文件导航" />;
-  if (untitled) return <NavigatorEmpty message="当前文档尚未保存，保存后可浏览所在目录或 Bambook 文档库。" />;
+  const emptyMessage = !document && !workspace.folderPath ? "打开文档或文件夹后显示文件导航"
+    : untitled && !workspace.folderPath ? "当前文档尚未保存，保存后可浏览所在目录或 Bambook 文档库。" : null;
+  if (emptyMessage && !directoryOnly) return <NavigatorEmpty message={emptyMessage} />;
 
   const beginRelink = async (target: StoredDocument) => {
     if (relinkingId) return;
@@ -141,8 +143,12 @@ export function DocumentFileNavigator() {
   };
 
   return <div className="document-file-navigator">
+    {directoryOnly && <div className="workspace-folder-heading">
+      <span title={displayPath(directoryRoot)}>{directoryRoot ? (displayPath(directoryRoot).replace(/[\\/]+$/, "").split(/[\\/]/).pop() || directoryRoot) : "未选择文件夹"}</span>
+      <button type="button" aria-label="打开文件夹" data-tooltip="打开文件夹" onClick={() => void workspace.openFolder()}><FolderOpen size={17} /></button>
+    </div>}
     <div className="document-file-content">
-      {workspace.fileNavigationMode === "directory" ? (
+      {emptyMessage ? <NavigatorEmpty message={emptyMessage} /> : navigationMode === "directory" ? (
         sourceUnavailable && storedDocument ? (
           <InvalidSourceState document={storedDocument} relinking={relinkingId === storedDocument.id} onRelink={() => void beginRelink(storedDocument)} />
         ) : directoryLoading || workspace.folderLoading ? (
@@ -177,20 +183,20 @@ export function DocumentFileNavigator() {
       )}
     </div>
 
-    <div className="document-file-viewbar">
+    {!directoryOnly && <div className="document-file-viewbar">
       <div>
-        <strong>{workspace.fileNavigationMode === "directory" ? "文件夹视图" : "Bambook 文档库"}</strong>
-        <small title={workspace.fileNavigationMode === "directory" ? directoryRoot : "Bambook 托管文档"}>
-          {workspace.fileNavigationMode === "directory" ? (directoryRoot || "来源目录") : `${library.length} 个文档`}
+        <strong>{navigationMode === "directory" ? "文件夹视图" : "Bambook 文档库"}</strong>
+        <small title={navigationMode === "directory" ? directoryRoot : "Bambook 托管文档"}>
+          {navigationMode === "directory" ? (directoryRoot || "来源目录") : `${library.length} 个文档`}
         </small>
       </div>
       <button type="button" className="document-file-view-toggle"
-        data-tooltip={workspace.fileNavigationMode === "directory" ? "切换到文档库视图" : "切换到文件夹视图"}
-        aria-label={workspace.fileNavigationMode === "directory" ? "切换到文档库视图" : "切换到文件夹视图"}
-        onClick={() => workspace.setFileNavigationMode(workspace.fileNavigationMode === "directory" ? "library" : "directory")}>
-        {workspace.fileNavigationMode === "directory" ? <Library size={17} /> : <FolderTree size={17} />}
+        data-tooltip={navigationMode === "directory" ? "切换到文档库视图" : "切换到文件夹视图"}
+        aria-label={navigationMode === "directory" ? "切换到文档库视图" : "切换到文件夹视图"}
+        onClick={() => workspace.setFileNavigationMode(navigationMode === "directory" ? "library" : "directory")}>
+        {navigationMode === "directory" ? <Library size={17} /> : <FolderTree size={17} />}
       </button>
-    </div>
+    </div>}
 
     {confirmation && createPortal(<RelinkConfirmationDialog confirmation={confirmation}
       onCancel={() => setConfirmation(null)} onConfirm={() => void confirmRelink()} />, window.document.body)}

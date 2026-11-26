@@ -1,3 +1,4 @@
+import type { AssistantTextAction } from "../../../components/ai/assistantActions";
 import { useEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
 import type { Annotation, AnnotationRect, MarkupType } from "../../annotations";
 import { copyText } from "../../../platform/clipboard";
@@ -34,7 +35,7 @@ type PdfViewerProps = {
   onScaleChange: (scale: number) => void;
   onSelectionCapture: (selection: Omit<PdfSelection, "x" | "y" | "bookmarkX" | "bookmarkY">) => void;
   onTranslateSelection: (selection: Omit<PdfSelection, "x" | "y" | "bookmarkX" | "bookmarkY">) => void;
-  onAskLlmSelection: (selection: Omit<PdfSelection, "x" | "y" | "bookmarkX" | "bookmarkY">) => void;
+  onAskLlmSelection: (selection: Omit<PdfSelection, "x" | "y" | "bookmarkX" | "bookmarkY">, action?: AssistantTextAction) => void;
   onClearSelection: () => void;
   onApplyMarkup: (type: MarkupType, selection: Omit<PdfSelection, "x" | "y" | "bookmarkX" | "bookmarkY">) => void;
   onAnnotationSelect: (id: string) => void;
@@ -485,11 +486,11 @@ export function PdfReader(props: PdfViewerProps) {
         }}
         onAnnotationContextMenu={(event, annotation, bookmark) => {
           props.onAnnotationSelect(annotation.id);
-          const point = clampMenuPoint(event.clientX, event.clientY, annotation.type === "area" ? 320 : 286, annotation.type === "area" ? 620 : 355);
+          const point = clampMenuPoint(event.clientX, event.clientY, annotation.type === "area" ? 320 : 286, annotation.type === "area" ? 620 : 495);
           setContextMenu({ kind: "annotation", menuX: point.x, menuY: point.y, annotationId: annotation.id, bookmark });
         }}
         onTextContextMenu={(event, text, rects, bookmark) => {
-          const point = clampMenuPoint(event.clientX, event.clientY, 230, 286);
+          const point = clampMenuPoint(event.clientX, event.clientY, 230, 388);
           setContextMenu({ kind: "selection", x: point.x, y: point.y,
             page: index + 1, text, rects, bookmarkX: bookmark.x, bookmarkY: bookmark.y });
         }} onLinkActivate={activateLink}
@@ -502,8 +503,8 @@ export function PdfReader(props: PdfViewerProps) {
         setContextMenu(null);
         window.getSelection()?.removeAllRanges();
       }}
-      onAskLlm={(selection) => {
-        props.onAskLlmSelection(selection);
+      onAskLlm={(selection, action) => {
+        props.onAskLlmSelection(selection, action);
         setContextMenu(null);
         window.getSelection()?.removeAllRanges();
       }}
@@ -537,6 +538,11 @@ export function PdfReader(props: PdfViewerProps) {
         onDelete={() => { props.onAnnotationDelete(annotation.id); setContextMenu(null); }} />;
       return annotation ? <PdfAnnotationMenu x={contextMenu.menuX} y={contextMenu.menuY} annotation={annotation}
         onCopy={() => { void copyText(annotation.selectedText); setContextMenu(null); }}
+        onAskLlm={(action) => {
+          props.onAskLlmSelection({ text: annotation.selectedText, page: annotation.page ?? contextMenu.bookmark.page, rects: annotation.rects ?? [] }, action);
+          setContextMenu(null);
+          window.getSelection()?.removeAllRanges();
+        }}
         onColor={props.onAnnotationColor}
         onConvert={(type) => { props.onAnnotationConvert(annotation.id, type); setContextMenu(null); }}
         onDelete={() => { props.onAnnotationDelete(annotation.id); setContextMenu(null); }}

@@ -5,7 +5,7 @@ import { useNotification } from "../../features/notifications";
 import { SettingsPanel, useSettings } from "../../features/settings";
 import { destroyCurrentWindow } from "../../platform/window";
 import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
-import { TopToolbar } from "./TopToolbar";
+import { WorkspaceStatusBar } from "./WorkspaceStatusBar";
 import { WorkspaceHost } from "./WorkspaceHost";
 import { GlobalTooltip } from "../../components/tooltips/GlobalTooltip";
 import { WindowTitleBar } from "./WindowTitleBar";
@@ -66,9 +66,9 @@ export function AppShell() {
   return (
     <div className="app-shell" onDragOver={handleDragOver} onDrop={handleDrop}>
       <WindowTitleBar />
-      <TopToolbar />
       {panelOpen && <SettingsPanel />}
       <WorkspaceHost />
+      <WorkspaceStatusBar />
       <ToastViewport />
       <GlobalTooltip />
     </div>

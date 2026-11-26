@@ -7,6 +7,7 @@ use crate::features::assistant::llm::LlmChatResponseDto;
 use crate::features::assistant::llm::LlmConfigDto;
 use crate::features::assistant::llm::LlmConnectionStatusDto;
 use crate::features::assistant::llm::LlmService;
+use crate::features::assistant::llm::LlmStreamDelta;
 use crate::features::assistant::llm::LlmStreamEventDto;
 use crate::shared::error::AppError;
 use crate::shared::error::AppResult;
@@ -20,9 +21,13 @@ pub(crate) async fn ask_llm(
 ) -> AppResult<LlmChatResponseDto> {
     let service = Arc::clone(state.inner());
     let result = service
-        .chat_stream(&config.into(), request.into(), &mut |content| {
+        .chat_stream(&config.into(), request.into(), &mut |delta| {
+            let event = match delta {
+                LlmStreamDelta::Content(content) => LlmStreamEventDto::Delta { content },
+                LlmStreamDelta::Reasoning(content) => LlmStreamEventDto::Reasoning { content },
+            };
             on_event
-                .send(LlmStreamEventDto::Delta { content })
+                .send(event)
                 .map_err(|error| AppError::Llm(format!("无法发送流式回答：{error}")))
         })
         .await;

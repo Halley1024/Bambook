@@ -1,11 +1,13 @@
-import { BookmarkPlus, Copy, Trash2 } from "lucide-react";
+import { BookmarkPlus, Bot, Copy, Trash2 } from "lucide-react";
+import { AssistantMenuActions } from "../../../components/ai/AssistantMenuActions";
+import type { AssistantTextAction } from "../../../components/ai/assistantActions";
 import type { Annotation, MarkupType } from "../../annotations";
 import { MarkupIcon } from "./MarkupIcon";
 import { ANNOTATION_CONTEXT_COLORS, ContextColorPicker } from "./ContextColorPicker";
 
 const MARKUP_TYPES: MarkupType[] = ["highlight", "underline", "squiggly", "strikeout"];
 
-export function PdfAnnotationMenu({ x, y, annotation, onCopy, onColor, onConvert, onDelete, onAddBookmark }: {
+export function PdfAnnotationMenu({ x, y, annotation, onCopy, onColor, onConvert, onDelete, onAddBookmark, onAskLlm }: {
   x: number;
   y: number;
   annotation: Annotation;
@@ -14,10 +16,15 @@ export function PdfAnnotationMenu({ x, y, annotation, onCopy, onColor, onConvert
   onConvert: (type: MarkupType) => void;
   onDelete: () => void;
   onAddBookmark: () => void;
+  onAskLlm: (action?: AssistantTextAction) => void;
 }) {
   return <div className="selection-context-menu annotation-context-menu" style={{ left: x, top: y }}
     onPointerDown={(event) => event.stopPropagation()}>
     <button data-tooltip="复制文字：将批注对应文字写入剪贴板" onClick={onCopy}><Copy size={17} />复制文字</button>
+    {annotation.selectedText.trim() && <>
+      <button type="button" onClick={() => onAskLlm()}><Bot size={17} />询问大模型</button>
+      <AssistantMenuActions onAction={onAskLlm} />
+    </>}
     <div className="context-menu-separator" />
     <div className="context-menu-label">调色盘</div>
     <ContextColorPicker value={annotation.color} onChange={onColor} scopeLabel="批注"

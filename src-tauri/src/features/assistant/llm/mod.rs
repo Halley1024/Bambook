@@ -16,5 +16,6 @@ pub(crate) use model::LlmConfig;
 pub(crate) use model::LlmConnectionStatus;
 pub(crate) use model::LlmMessage;
 pub(crate) use model::LlmMessageRole;
+pub(crate) use model::LlmStreamDelta;
 pub(crate) use ports::llm_provider::LlmClient;
 pub(crate) use service::LlmService;

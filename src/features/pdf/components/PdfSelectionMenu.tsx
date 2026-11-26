@@ -1,4 +1,6 @@
-import { BookmarkPlus, Bot, Copy, Languages } from "lucide-react";
+import { BookmarkPlus, Bot, Copy } from "lucide-react";
+import { AssistantMenuActions } from "../../../components/ai/AssistantMenuActions";
+import type { AssistantTextAction } from "../../../components/ai/assistantActions";
 import type { AnnotationRect, MarkupType } from "../../annotations";
 import { MarkupIcon } from "./MarkupIcon";
 
@@ -16,7 +18,7 @@ export function PdfSelectionMenu({ selection, onCopy, onTranslate, onAskLlm, onA
   selection: PdfSelection;
   onCopy: (selection: PdfSelection) => void;
   onTranslate: (selection: PdfSelection) => void;
-  onAskLlm: (selection: PdfSelection) => void;
+  onAskLlm: (selection: PdfSelection, action?: AssistantTextAction) => void;
   onApply: (type: MarkupType, selection: PdfSelection) => void;
   onAddBookmark: (selection: PdfSelection) => void;
 }) {
@@ -24,6 +26,7 @@ export function PdfSelectionMenu({ selection, onCopy, onTranslate, onAskLlm, onA
     onPointerDown={(event) => event.stopPropagation()}>
     <button data-tooltip="复制文字：将所选内容写入剪贴板" onClick={() => onCopy(selection)}><Copy size={17} />复制文字</button>
     <button data-tooltip="询问大模型：使用所选文字进行总结、解释或问答" onClick={() => onAskLlm(selection)}><Bot size={17} />询问大模型</button>
+    <AssistantMenuActions onAction={(action) => onAskLlm(selection, action)} />
     <div className="context-menu-separator" />
     <button data-tooltip="添加下划线：标记所选文字" onClick={() => onApply("underline", selection)}><MarkupIcon type="underline" size={17} />添加下划线</button>
     <button data-tooltip="添加波浪线：标记所选文字" onClick={() => onApply("squiggly", selection)}><MarkupIcon type="squiggly" size={17} />添加波浪线</button>

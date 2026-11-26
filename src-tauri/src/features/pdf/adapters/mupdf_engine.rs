@@ -84,6 +84,7 @@ impl PdfEngine for MupdfPdfEngine {
         Ok(document)
     }
 
+    // 权限校验
     fn authenticate(&self, session_id: &str, password: &str) -> AppResult<PdfDocumentModel> {
         self.request(session_id, |reply| {
             Request::Authenticate(password.to_owned(), reply)

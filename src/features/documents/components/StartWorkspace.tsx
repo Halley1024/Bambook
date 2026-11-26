@@ -6,6 +6,7 @@ import {
   FolderOpen,
   Library,
   Search,
+  Star,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { message } from "@tauri-apps/plugin-dialog";
@@ -20,9 +21,13 @@ import {
 import type { RecentDocument } from "../repositories/documentHistoryRepository";
 import type { DocumentKind } from "../types";
 
+import { useDocumentFavorites } from "../hooks/useDocumentFavorites";
+import type { LibrarySection } from "./WorkspaceNavigation";
+
 type LibraryFilter = "all" | DocumentKind;
 
-export function StartWorkspace() {
+export function StartWorkspace({ section = "all" }: { section?: LibrarySection }) {
+  const favorites = useDocumentFavorites();
   const workspace = useDocumentWorkspace();
   const history = useDocumentHistory();
   const notification = useNotification();
@@ -46,12 +51,13 @@ export function StartWorkspace() {
   const filteredDocuments = useMemo(() => {
     const normalizedQuery = query.trim().toLocaleLowerCase();
     return documents.filter((document) => {
+      if (section === "favorites" && !favorites.isFavorite(document.path)) return false;
       if (filter !== "all" && document.kind !== filter) return false;
       if (!normalizedQuery) return true;
       return document.title.toLocaleLowerCase().includes(normalizedQuery)
         || document.sourcePath.toLocaleLowerCase().includes(normalizedQuery);
     });
-  }, [documents, filter, query]);
+  }, [documents, filter, query, section, favorites.paths]);
 
   const openPath = async (path: string) => {
     if (openingPath) return;
@@ -100,7 +106,7 @@ export function StartWorkspace() {
         <header className="start-hero">
           <div className="start-hero-copy">
             <span className="start-eyebrow"><BookOpen size={16} />Bambook 文档工作区</span>
-            <h1>继续阅读，或者开始一份新文档</h1>
+            <h1>{section === "favorites" ? "收藏值得重读的文字" : section === "recent" ? "接着上一次的思考" : "继续阅读，或者开始一份新文档"}</h1>
             <p>最近访问记录与 Bambook 托管文档集中显示在这里。</p>
           </div>
           <div className="start-workspace-actions">
@@ -113,8 +119,8 @@ export function StartWorkspace() {
           </div>
         </header>
 
-        <div className="start-content-grid">
-          <section className="start-section start-recent-section">
+        <div className="start-content-grid workspace-collection-grid">
+          <section className="start-section start-recent-section" hidden={section !== "recent"}>
             <div className="start-section-heading">
               <div><Clock3 size={18} /><h2>最近访问</h2></div>
               <span>{history.recent.length}</span>
@@ -135,11 +141,11 @@ export function StartWorkspace() {
             </div>
           </section>
 
-          <section className="start-section start-library-section">
+          <section className="start-section start-library-section" hidden={section === "recent"}>
             <div className="start-library-heading">
               <div className="start-section-heading">
-                <div><Library size={18} /><h2>全部文档</h2></div>
-                <span>{documents.length}</span>
+                <div><Library size={18} /><h2>{section === "favorites" ? "我的收藏" : "全部文档"}</h2></div>
+                <span>{section === "favorites" ? filteredDocuments.length : documents.length}</span>
               </div>
               <div className="start-library-controls">
                 <label className="start-library-search">
@@ -156,9 +162,10 @@ export function StartWorkspace() {
             <div className="start-library-list">
               {loadingLibrary ? <StartEmpty label="正在读取文档库…" /> : null}
               {!loadingLibrary && !filteredDocuments.length ? (
-                <StartEmpty label={documents.length ? "没有符合条件的文档" : "文档库还是空的，打开文件后会自动加入"} />
+                <StartEmpty label={section === "favorites" ? "还没有收藏，在文档列表或底部状态栏点击星标收藏" : documents.length ? "没有符合条件的文档" : "文档库还是空的，打开文件后会自动加入"} />
               ) : null}
               {filteredDocuments.map((document) => (
+                <div className="start-library-document-row" key={document.id}>
                 <button
                   className="start-library-item"
                   key={document.id}
@@ -176,6 +183,8 @@ export function StartWorkspace() {
                     <time>{formatAccessTime(document.lastOpenedAt)}</time>
                   </span>
                 </button>
+                <button type="button" className="document-favorite-button" aria-label={favorites.isFavorite(document.path) ? `取消收藏：${document.title}` : `收藏：${document.title}`} aria-pressed={favorites.isFavorite(document.path)} data-tooltip={favorites.isFavorite(document.path) ? "取消收藏" : "收藏文档"} onClick={() => favorites.toggle(document.path)}><Star size={17} fill={favorites.isFavorite(document.path) ? "currentColor" : "none"} /></button>
+                </div>
               ))}
             </div>
           </section>

@@ -59,10 +59,12 @@ Windows 的 C/C++ 编译器与 MSBuild 由构建依赖自动定位，需安装 V
 
 ```sh
 npm ci
-npm run tauri -- dev
+npm run tauri:dev
 ```
 
-只调试前端界面时可运行 `npm run dev`，浏览器地址为 `http://localhost:1420`；文件访问、PDF 渲染等原生能力需在 Tauri 应用中使用。
+`tauri:dev` 是 `package.json` 中的 npm 脚本，请使用 `npm run tauri:dev`（或 `npm run tauri -- dev`），不要使用 `cargo run tauri:dev`。Tauri CLI 会先运行 `npm run dev` 启动前端服务，再启动 Rust 后端；直接执行 `cargo run` 不会启动前端服务，开发窗口可能出现“拒绝连接”。
+
+只调试前端界面时可运行 `npm run dev`，浏览器地址为 `http://127.0.0.1:1420`；文件访问、PDF 渲染等原生能力需在 Tauri 应用中使用。Vite 和 Tauri 的开发地址统一使用 IPv4 回环地址，避免 `localhost` 的 IPv4 / IPv6 解析差异导致连接失败。开发期间请保持启动命令所在终端运行。
 
 ### 3. 构建与检查
 

@@ -64,6 +64,7 @@ pub(crate) struct LlmConnectionStatusDto {
 #[serde(tag = "type", rename_all = "camelCase")]
 pub(crate) enum LlmStreamEventDto {
     Delta { content: String },
+    Reasoning { content: String },
     Complete,
 }
 

@@ -10,7 +10,7 @@ const leftPanelCollapseThreshold = minimumLeftPanelWidth - 30;
 export function useWorkspacePanelWidths(widths: WorkspacePanelWidths, onWidthsChange: (widths: WorkspacePanelWidths) => void,
   options?: { onLeftCollapse?: () => void }) {
   const [resizing, setResizing] = useState<PanelSide | null>(null);
-  const dragRef = useRef<{ side: PanelSide; startX: number; startWidth: number } | null>(null);
+  const dragRef = useRef<{ side: PanelSide; startX: number; startWidth: number; navigationWidth: number } | null>(null);
   const widthsRef = useRef(widths);
   const onWidthsChangeRef = useRef(onWidthsChange);
   const onLeftCollapseRef = useRef(options?.onLeftCollapse);
@@ -43,7 +43,7 @@ export function useWorkspacePanelWidths(widths: WorkspacePanelWidths, onWidthsCh
           leftWidth: Math.round(clamp(requestedWidth, minimumLeftPanelWidth, Math.min(420, maximum))),
         });
       } else {
-        const maximum = Math.max(220, window.innerWidth - widthsRef.current.leftWidth - minimumContentWidth);
+        const maximum = Math.max(220, window.innerWidth - drag.navigationWidth - minimumContentWidth);
         onWidthsChangeRef.current({
           ...widthsRef.current,
           rightWidth: Math.round(clamp(drag.startWidth - delta, 220, maximum)),
@@ -69,6 +69,7 @@ export function useWorkspacePanelWidths(widths: WorkspacePanelWidths, onWidthsCh
       side,
       startX: event.clientX,
       startWidth: side === "left" ? widthsRef.current.leftWidth : widthsRef.current.rightWidth,
+      navigationWidth: event.currentTarget.closest(".workspace-shell")?.querySelector(".workspace-navigation")?.getBoundingClientRect().width ?? widthsRef.current.leftWidth,
     };
     setResizing(side);
     document.body.classList.add("workspace-panel-resizing");

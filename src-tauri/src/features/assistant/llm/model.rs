@@ -1,9 +1,12 @@
 #[derive(Debug, Clone)]
 pub(crate) struct LlmConfig {
-    pub(crate) base_url: String,     // 兼容 OpenAI 接口的服务根地址。
-    pub(crate) model: String,        // 请求使用的模型名称。
-    pub(crate) api_key: String,      // 访问服务所需的 API 密钥。
-    pub(crate) timeout_seconds: u64, // 请求超时时长，单位为秒。
+    pub(crate) base_url: String,      // 兼容 OpenAI 接口的服务根地址。
+    pub(crate) model: String,         // 请求使用的模型名称。
+    pub(crate) api_key: String,       // 访问服务所需的 API 密钥。
+    pub(crate) timeout_seconds: u64,  // 请求超时时长，单位为秒。
+    // // TODO
+    // pub(crate) thinking: bool,        // 是否开启思考模式
+    // pub(crate) reason_effort: String, // 思考强度
 }
 
 #[derive(Debug, Clone)]
@@ -33,6 +36,12 @@ impl LlmMessageRole {
 pub(crate) struct LlmChatRequest {
     pub(crate) messages: Vec<LlmMessage>, // 按对话顺序发送给模型的消息。
     pub(crate) temperature: f32,          // 生成时的温度参数。
+}
+
+#[derive(Debug, Clone)]
+pub(crate) enum LlmStreamDelta {
+    Content(String),
+    Reasoning(String),
 }
 
 #[derive(Debug, Clone)]

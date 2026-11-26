@@ -18,3 +18,4 @@
 @import "../features/pdf/styles/pdf-sidebar.css";
 @import "../features/settings/styles.css";
 @import "./theme.css";
+@import "../app/styles/workspace-navigation.css";

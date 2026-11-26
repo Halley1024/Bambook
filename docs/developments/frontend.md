@@ -46,6 +46,7 @@ NotificationProvider
 | 设置和布局 | `SettingsProvider` | `ready` 区分默认值与加载完成 |
 | 提示消息 | `NotificationProvider` | 统一用户反馈 |
 | 助手对话 | `AssistantSidebar` 组件状态 | 目前不属于统一文档持久化模型 |
+| 文档收藏 | `useDocumentFavorites` | 按文档路径保存在当前应用的 `localStorage`，列表与状态栏通过事件同步 |
 
 同一数据应确定明确拥有者。比如标签 dirty 状态由文档层展示，但是否修改由 PDF / Markdown 业务层判断；不能只在关闭按钮中猜测。
 
@@ -65,7 +66,15 @@ NotificationProvider
 
 ## 005 · 工作区与扩展
 
-[WorkspaceHost.tsx](../../src/app/layout/WorkspaceHost.tsx) 根据活动文档选择 PDF / Markdown 工作区，无活动文档时显示开始页或文件夹工作区。两个业务 Provider 都在应用树内，页面切换不等于服务或会话已经释放。
+[WorkspaceHost.tsx](../../src/app/layout/WorkspaceHost.tsx) 固定挂载左侧工作区导航，根据活动文档选择 PDF / Markdown 工作区；无活动文档时，通过开始页展示文档库、最近阅读或收藏。文件夹树始终位于左侧导航的第二部分，知识图谱保留为禁用入口。
+
+PDF / Markdown 的搜索、目录等工具与 AI 助手使用右侧 `WorkspaceTools` 图标栏切换，文件导航统一放在左侧。左侧目录区域以当前根目录名称作为标题，并通过分界线区分工作区信息、文档集合、目录与页脚。面板仅通过图标或收起按钮手动展开、收起，没有置顶和点击外部自动回缩行为；AI 助手保持挂载，切换工具或收起面板时保留对话。左侧导航在设置加载后锁定当前宽度占比，切换文档模式或调整窗口尺寸时保持此占比，不提供拖动调宽入口；右侧宽度继续由设置中的对应工作区布局管理。
+
+顶部工具栏挂载在 `WorkspaceHost` 的文档区域内，与左侧导航顶部齐平；左侧工作区标题区域与工具栏均高 56px。
+
+全局菜单集中在 `WindowTitleBar` 右侧，依次为标签列表下拉、文件、通知、帮助、设置，均以图标显示。文件菜单仍随活动文档切换工作区、PDF 或 Markdown 操作；设置入口统一打开原设置中心。文档工具栏与右侧工具栏不再重复显示这些入口。
+
+窗口底部的 `WorkspaceStatusBar` 统一展示活动文档状态：PDF 通过 `PdfPageNavigation` 提供上一页、下一页、可编辑页码及阅读历史后退、前进，通过 `PdfZoomControls` 提供缩小、放大、百分比输入、向上展开的预设比例菜单、适合宽度与适合页面，另显示按页数计算的阅读进度；顶部保留批注等工具。页码与缩放输入支持回车或失焦提交、Escape 取消，越界数值限制在有效范围内。Markdown 显示不含空白的字符数、光标行列和保存状态。原编辑区内部状态栏不再重复挂载。两个业务 Provider 都在应用树内，页面切换不等于服务或会话已经释放。
 
 新增业务交互时：
 

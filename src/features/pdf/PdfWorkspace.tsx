@@ -1,5 +1,5 @@
+import type { AssistantActionRequest } from "../../components/ai/assistantActions";
 import { useEffect, useState, type CSSProperties } from "react";
-import { AssistantSidebar } from "../../components/ai/AssistantSidebar";
 import { PdfReader } from "./components/PdfReader";
 import { PdfSidebar } from "./components/PdfSidebar";
 import { usePdfWorkspace } from "./hooks/usePdfWorkspace";
@@ -13,9 +13,9 @@ export function PdfWorkspace() {
   const panels = useWorkspacePanelWidths(
     settings.pdfWorkspaceLayout,
     (layout) => updateWorkspaceLayout("pdf", layout),
-    { onLeftCollapse: workspace.sidebarCollapsed ? undefined : workspace.toggleSidebar },
   );
   const [llmText, setLlmText] = useState("");
+  const [assistantRequest, setAssistantRequest] = useState<AssistantActionRequest | null>(null);
   const panelStyle = {
     "--workspace-left-width": `${panels.leftWidth}px`,
     "--workspace-right-width": `${panels.rightWidth}px`,
@@ -49,8 +49,9 @@ export function PdfWorkspace() {
           onScaleChange={workspace.setScale}
           onSelectionCapture={workspace.captureSelection}
           onTranslateSelection={() => undefined}
-          onAskLlmSelection={(selection) => {
+          onAskLlmSelection={(selection, action) => {
             setLlmText(selection.text);
+            setAssistantRequest({ id: crypto.randomUUID(), text: selection.text, action });
             if (workspace.annotationPanelCollapsed) workspace.toggleAnnotationPanel();
           }}
           onClearSelection={workspace.clearSelection}
@@ -79,30 +80,22 @@ export function PdfWorkspace() {
   return (
     <PdfSessionProvider document={workspace.activeDocument}>
       <main
-        className={`workspace ${workspace.sidebarCollapsed ? "sidebar-collapsed" : ""} ${
+        className={`workspace tools-workspace ${
           workspace.annotationPanelCollapsed ? "annotation-collapsed" : ""
         } ${panels.resizing ? "resizing-panels" : ""}`}
         style={panelStyle}
       >
+        {content}
         <PdfSidebar
           currentPage={workspace.currentPage}
           bookmarks={workspace.bookmarks}
           onNavigatePage={workspace.navigateToPage}
           onNavigateOutline={workspace.navigateToOutline}
-          collapsed={workspace.sidebarCollapsed}
-          onToggleCollapsed={workspace.toggleSidebar}
-          onResizeStart={panels.beginLeftResize}
-        />
-
-        {content}
-
-        <AssistantSidebar
-          contextText={llmText}
-          contextLabel="PDF 选中文本"
-          emptyContextHint="在 PDF 中选中文字，右键选择“询问大模型”以带入上下文。"
           collapsed={workspace.annotationPanelCollapsed}
           onToggleCollapsed={workspace.toggleAnnotationPanel}
           onResizeStart={panels.beginRightResize}
+          assistantText={llmText}
+          assistantRequest={assistantRequest}
         />
       </main>
     </PdfSessionProvider>

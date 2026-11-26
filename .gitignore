@@ -3,6 +3,7 @@ node_modules/
 dist/
 coverage/
 .vite/
+build/
 
 # Rust and Tauri outputs
 target/
@@ -42,3 +43,6 @@ desktop.ini
 
 # Log documents
 docs/logs/
+
+# Demo page
+Demo/

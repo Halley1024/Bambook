@@ -1,10 +1,14 @@
-import { Bell, BookOpen, FileText, X } from "lucide-react";
+import { Bell, BookOpen, FileText, Settings, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { UnifiedDocumentTabs, useDocumentWorkspace } from "../../features/documents";
 import { TitlebarIcon } from "./TitlebarIcons";
+import { AppFileMenu } from "./AppFileMenu";
+import { HelpMenu } from "../../features/help";
+import { useSettings } from "../../features/settings";
 
 export function WindowTitleBar() {
   const workspace = useDocumentWorkspace();
+  const settings = useSettings();
   const [popover, setPopover] = useState<"notifications" | "tabs" | null>(null);
   const actionsRef = useRef<HTMLDivElement | null>(null);
 
@@ -34,7 +38,10 @@ export function WindowTitleBar() {
 
       <div className="window-titlebar-spacer" aria-hidden="true" />
 
-      <div className="window-titlebar-actions" ref={actionsRef}>
+      <div className="window-titlebar-actions" ref={actionsRef}
+        onClickCapture={(event) => {
+          if (event.target instanceof Element && event.target.closest(".titlebar-menu-host, .titlebar-settings-button")) setPopover(null);
+        }}>
         <div className="titlebar-popover-host">
           <button type="button" className={`titlebar-icon-button ${popover === "tabs" ? "active" : ""}`}
             onClick={() => setPopover((value) => value === "tabs" ? null : "tabs")}
@@ -62,6 +69,8 @@ export function WindowTitleBar() {
           </div>}
         </div>
 
+        <div className="titlebar-menu-host"><AppFileMenu /></div>
+
         <div className="titlebar-popover-host">
           <button type="button" className={`titlebar-icon-button ${popover === "notifications" ? "active" : ""}`}
             onClick={() => setPopover((value) => value === "notifications" ? null : "notifications")}
@@ -71,6 +80,10 @@ export function WindowTitleBar() {
             <div className="titlebar-empty-message"><Bell size={22} /><span>暂无新通知</span><small>检测到新版本时会在这里提醒。</small></div>
           </div>}
         </div>
+
+        <div className="titlebar-menu-host"><HelpMenu /></div>
+        <button type="button" className={`titlebar-icon-button titlebar-settings-button ${settings.panelOpen ? "active" : ""}`}
+          aria-label="设置中心" data-tooltip="设置中心" onClick={() => { setPopover(null); settings.openPanel(); }}><Settings size={18} /></button>
 
       </div>
     </header>

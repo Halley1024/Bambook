@@ -149,8 +149,10 @@ export function PdfPage({ sessionId, pageNumber, scale, fitWidth, annotations, b
           onLoad={(event) => {
             setImageLoaded(true);
             if (!pageSize && imageRenderScaleRef.current > 0) {
-              setPageSize({ width: event.currentTarget.naturalWidth / imageRenderScaleRef.current,
-                height: event.currentTarget.naturalHeight / imageRenderScaleRef.current });
+              setPageSize({
+                width: event.currentTarget.naturalWidth / imageRenderScaleRef.current,
+                height: event.currentTarget.naturalHeight / imageRenderScaleRef.current
+              });
             }
           }} />}
         {active && !imageUrl && <div className="pdf-page-loading">{error ? `页面加载失败：${error}` : "正在渲染…"}</div>}
@@ -202,8 +204,10 @@ export function PdfPage({ sessionId, pageNumber, scale, fitWidth, annotations, b
           {pageVisible && annotations.filter((annotation) => (annotation.hasNote || annotation.note.trim()) && annotation.rects?.length).map((annotation) => {
             const first = annotation.rects![0];
             return <span className={`annotation-note-marker annotation-color-target ${selectedAnnotationId === annotation.id ? "selected" : ""}`}
-              data-annotation-id={annotation.id} key={`note-${annotation.id}`} style={{ left: `${first.left * 100}%`, top: `${first.top * 100}%`,
-                background: `var(--annotation-color, ${annotation.color})` }}>
+              data-annotation-id={annotation.id} key={`note-${annotation.id}`} style={{
+                left: `${first.left * 100}%`, top: `${first.top * 100}%`,
+                background: `var(--annotation-color, ${annotation.color})`
+              }}>
               <MessageSquareText size={10} />
             </span>;
           })}
@@ -246,9 +250,11 @@ export function PdfPage({ sessionId, pageNumber, scale, fitWidth, annotations, b
           {structure.links.map((link, index) => {
             const allowed = Boolean(link.targetPage) || isAllowedExternalPdfLink(link.uri);
             return <button key={`${link.uri}-${index}`} className={`pdf-link-hotspot ${allowed ? "" : "blocked"}`}
-              style={{ left: link.bounds.left * displayScale, top: link.bounds.top * displayScale,
+              style={{
+                left: link.bounds.left * displayScale, top: link.bounds.top * displayScale,
                 width: (link.bounds.right - link.bounds.left) * displayScale,
-                height: (link.bounds.bottom - link.bounds.top) * displayScale }}
+                height: (link.bounds.bottom - link.bounds.top) * displayScale
+              }}
               onClick={(event) => { event.stopPropagation(); if (allowed) onLinkActivate(link); }}
               data-tooltip={pdfLinkTooltip(link)} aria-label={pdfLinkTooltip(link)} aria-disabled={!allowed} />;
           })}

@@ -20,7 +20,7 @@
 .titlebar-icon-button.new-tab { margin-right:2px }
 .window-document-tabs { min-width:96px;height:38px;flex:1 1 0;overflow:hidden }
 .window-titlebar-spacer { width:var(--titlebar-tab-width);min-width:var(--titlebar-tab-width);height:100%;flex:0 0 var(--titlebar-tab-width) }
-.window-titlebar-actions { width:82px;min-width:82px;height:100%;display:grid;grid-template-columns:36px 36px;align-items:center;flex:0 0 82px;gap:2px;padding-right:8px;overflow:visible }
+.window-titlebar-actions { width:196px;min-width:196px;height:100%;display:grid;grid-template-columns:repeat(5,36px);align-items:center;flex:0 0 196px;gap:2px;padding-right:8px;overflow:visible }
 .window-control-button { width:100%;height:100%;min-width:42px;flex:none;border-radius:0 }
 .window-control-button.close:hover,.window-control-button.close:focus-visible { color:#fff;background:#c42b1c }
 .titlebar-popover-host { position:relative;width:36px;min-width:36px }

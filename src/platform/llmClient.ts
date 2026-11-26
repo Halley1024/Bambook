@@ -10,9 +10,9 @@ export type LlmMessage = {
 export type LlmResponse = {
   content: string;
   model: string;
-  promptTokens?: number;
-  completionTokens?: number;
-  totalTokens?: number;
+  promptTokens?: number | null;
+  completionTokens?: number | null;
+  totalTokens?: number | null;
 };
 
 export type LlmConnectionStatus = {
@@ -22,6 +22,7 @@ export type LlmConnectionStatus = {
 
 export type LlmStreamEvent =
   | { type: "delta"; content: string }
+  | { type: "reasoning"; content: string }
   | { type: "complete" };
 
 function config(settings: AppSettings, model = settings.llmModel) {
@@ -34,11 +35,12 @@ function config(settings: AppSettings, model = settings.llmModel) {
 }
 
 export const llmClient = {
-  chat(settings: AppSettings, messages: LlmMessage[], handlers: { onDelta: (content: string) => void; onComplete: () => void }, model = settings.llmModel) {
+  chat(settings: AppSettings, messages: LlmMessage[], handlers: { onDelta: (content: string) => void; onReasoning?: (content: string) => void; onComplete: () => void }, model = settings.llmModel) {
     const onEvent = new Channel<LlmStreamEvent>();
     onEvent.onmessage = (event) => {
       if (event.type === "delta") handlers.onDelta(event.content);
-      else handlers.onComplete();
+      else if (event.type === "reasoning") handlers.onReasoning?.(event.content);
+      else if (event.type === "complete") handlers.onComplete();
     };
     return invokeCommand<LlmResponse>("ask_llm", {
       config: config(settings, model),

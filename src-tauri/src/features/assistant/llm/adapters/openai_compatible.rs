@@ -7,6 +7,7 @@ use crate::features::assistant::llm::LlmChatResponse;
 use crate::features::assistant::llm::LlmClient;
 use crate::features::assistant::llm::LlmConfig;
 use crate::features::assistant::llm::LlmConnectionStatus;
+use crate::features::assistant::llm::LlmStreamDelta;
 use crate::shared::error::AppError;
 use crate::shared::error::AppResult;
 
@@ -38,7 +39,7 @@ impl LlmClient for OpenAiCompatibleLlmClient {
         &'a self,
         config: &'a LlmConfig,
         request: LlmChatRequest,
-        on_delta: &'a mut (dyn FnMut(String) -> AppResult<()> + Send),
+        on_delta: &'a mut (dyn FnMut(LlmStreamDelta) -> AppResult<()> + Send),
     ) -> Pin<Box<dyn Future<Output = AppResult<LlmChatResponse>> + Send + 'a>> {
         Box::pin(async move {
             let endpoint = endpoint(config, "/v1/chat/completions")?;
@@ -54,6 +55,7 @@ impl LlmClient for OpenAiCompatibleLlmClient {
                     .collect(),
                 temperature: request.temperature,
                 max_tokens: MAX_OUTPUT_TOKENS,
+                enable_thinking: false,
                 stream: true,
             };
             let mut request = self
@@ -82,7 +84,8 @@ impl LlmClient for OpenAiCompatibleLlmClient {
 
             let mut pending = Vec::new();
             let mut output_bytes = 0_usize;
-            let mut has_content = false;
+            let mut content = String::new();
+            let mut has_reasoning = false;
             let mut model = config.model.clone();
             let mut usage = None;
             let mut finished = false;
@@ -122,27 +125,37 @@ impl LlmClient for OpenAiCompatibleLlmClient {
                         model = event.model;
                     }
                     usage = event.usage.or(usage);
-                    if let Some(delta) = event
-                        .choices
-                        .into_iter()
-                        .find_map(|choice| choice.delta.content)
-                    {
-                        output_bytes = output_bytes.saturating_add(delta.len());
-                        if output_bytes > MAX_OUTPUT_BYTES {
-                            return Err(AppError::Llm(
-                                "大模型服务输出超过 2 MB，已中止请求".into(),
-                            ));
+                    // One chunk may contain reasoning and answer text together.
+                    if let Some(choice) = event.choices.into_iter().next() {
+                        for delta in choice.delta.into_events() {
+                            let text = match &delta {
+                                LlmStreamDelta::Content(text) | LlmStreamDelta::Reasoning(text) => {
+                                    text
+                                }
+                            };
+                            output_bytes = output_bytes.saturating_add(text.len());
+                            if output_bytes > MAX_OUTPUT_BYTES {
+                                return Err(AppError::Llm(
+                                    "大模型服务输出超过 2 MB，已中止请求".into(),
+                                ));
+                            }
+                            match &delta {
+                                LlmStreamDelta::Content(text) => content.push_str(text),
+                                LlmStreamDelta::Reasoning(_) => has_reasoning = true,
+                            }
+                            on_delta(delta)?;
                         }
-                        has_content |= !delta.is_empty();
-                        on_delta(delta)?;
                     }
                 }
             }
-            if !has_content {
+            if content.is_empty() && has_reasoning {
+                return Err(AppError::Llm("模型仅返回思考内容，尚未生成回答正文；可能已达到输出上限，请调整模型的思考预算或缩短问题。".into()));
+            }
+            if content.is_empty() {
                 return Err(AppError::Llm("大模型服务未返回可用回答".into()));
             }
             Ok(LlmChatResponse {
-                content: String::new(),
+                content,
                 model,
                 prompt_tokens: usage.as_ref().and_then(|usage: &Usage| usage.prompt_tokens),
                 completion_tokens: usage
@@ -221,6 +234,7 @@ struct ChatCompletionRequest<'a> {
     temperature: f32,
     max_tokens: u32,
     stream: bool,
+    enable_thinking: bool,
 }
 
 #[derive(Serialize)]
@@ -248,6 +262,22 @@ struct StreamChatChoice {
 struct StreamChatResponseDelta {
     #[serde(default)]
     content: Option<String>,
+    #[serde(default, alias = "reasoning")]
+    reasoning_content: Option<String>,
+}
+
+impl StreamChatResponseDelta {
+    fn into_events(self) -> impl Iterator<Item = LlmStreamDelta> {
+        self.reasoning_content
+            .filter(|text| !text.is_empty())
+            .map(LlmStreamDelta::Reasoning)
+            .into_iter()
+            .chain(
+                self.content
+                    .filter(|text| !text.is_empty())
+                    .map(LlmStreamDelta::Content),
+            )
+    }
 }
 
 #[derive(Clone, Deserialize)]
@@ -259,10 +289,109 @@ struct Usage {
 
 #[cfg(test)]
 mod tests {
-    use super::response_error;
+    use super::*;
 
     #[test]
     fn truncates_server_errors_before_returning_them_to_the_ui() {
         assert!(response_error(&"a".repeat(501)).ends_with('…'));
+    }
+
+    #[test]
+    fn forwards_reasoning_before_answer_in_the_same_chunk() {
+        let event: StreamChatCompletionResponse = serde_json::from_str(
+            r#"{"choices":[{"delta":{"reasoning_content":"分析", "content":"回答"}}]}"#,
+        )
+        .unwrap();
+        let events: Vec<_> = event
+            .choices
+            .into_iter()
+            .next()
+            .unwrap()
+            .delta
+            .into_events()
+            .collect();
+        assert!(matches!(&events[0], LlmStreamDelta::Reasoning(text) if text == "分析"));
+        assert!(matches!(&events[1], LlmStreamDelta::Content(text) if text == "回答"));
+    }
+
+    #[test]
+    fn handles_reasoning_alias_and_empty_role_deltas() {
+        let delta: StreamChatResponseDelta =
+            serde_json::from_str(r#"{"reasoning":"分析","content":null}"#).unwrap();
+        assert!(
+            matches!(delta.into_events().next(), Some(LlmStreamDelta::Reasoning(text)) if text == "分析")
+        );
+        let delta: StreamChatResponseDelta =
+            serde_json::from_str(r#"{"role":"assistant","content":""}"#).unwrap();
+        assert_eq!(delta.into_events().count(), 0);
+    }
+
+    #[test]
+    fn delivers_reasoning_while_server_is_still_generating() {
+        use std::{
+            io::{Read, Write},
+            net::TcpListener,
+            sync::mpsc,
+        };
+        let listener = TcpListener::bind("127.0.0.1:0").unwrap();
+        let address = listener.local_addr().unwrap();
+        let (received_tx, received_rx) = mpsc::channel();
+        let server = std::thread::spawn(move || {
+            let (mut socket, _) = listener.accept().unwrap();
+            socket
+                .set_read_timeout(Some(Duration::from_secs(5)))
+                .unwrap();
+            let mut request = Vec::new();
+            let mut byte = [0];
+            while !request.ends_with(b"\r\n\r\n") {
+                socket.read_exact(&mut byte).unwrap();
+                request.push(byte[0]);
+            }
+            let headers = String::from_utf8(request).unwrap();
+            let length: usize = headers
+                .lines()
+                .find_map(|line| {
+                    let (key, value) = line.split_once(':')?;
+                    key.eq_ignore_ascii_case("content-length")
+                        .then(|| value.trim().parse().unwrap())
+                })
+                .unwrap();
+            socket.read_exact(&mut vec![0; length]).unwrap();
+            socket.write_all(b"HTTP/1.1 200 OK\r\nContent-Type: text/event-stream\r\nTransfer-Encoding: chunked\r\nConnection: close\r\n\r\n").unwrap();
+            let mut send = |data: &str| {
+                write!(socket, "{:x}\r\n{}\r\n", data.len(), data).unwrap();
+                socket.flush().unwrap();
+            };
+            send("data: {\"choices\":[{\"delta\":{\"reasoning_content\":\"分析\"}}]}\n\n");
+            // Do not send an answer until the client has delivered reasoning.
+            received_rx.recv_timeout(Duration::from_secs(5)).unwrap();
+            send("data: {\"choices\":[{\"delta\":{\"content\":\"回答\"}}]}\n\n");
+            send("data: [DONE]\n\n");
+            socket.write_all(b"0\r\n\r\n").unwrap();
+        });
+        let client = OpenAiCompatibleLlmClient::new().unwrap();
+        let config = LlmConfig {
+            base_url: format!("http://{address}"),
+            model: "test".into(),
+            api_key: String::new(),
+            timeout_seconds: 10,
+        };
+        let request = LlmChatRequest {
+            messages: vec![],
+            temperature: 0.5,
+        };
+        let mut deltas = Vec::new();
+        let result =
+            tauri::async_runtime::block_on(client.chat_stream(&config, request, &mut |delta| {
+                if matches!(delta, LlmStreamDelta::Reasoning(_)) {
+                    received_tx.send(()).unwrap();
+                }
+                deltas.push(delta);
+                Ok(())
+            }))
+            .unwrap();
+        server.join().unwrap();
+        assert_eq!(result.content, "回答");
+        assert_eq!(deltas.len(), 2);
     }
 }

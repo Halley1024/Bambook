@@ -4,6 +4,7 @@ use crate::features::assistant::llm::LlmChatRequest;
 use crate::features::assistant::llm::LlmChatResponse;
 use crate::features::assistant::llm::LlmConfig;
 use crate::features::assistant::llm::LlmConnectionStatus;
+use crate::features::assistant::llm::LlmStreamDelta;
 use crate::shared::error::AppResult;
 
 pub(crate) trait LlmClient: Send + Sync {
@@ -12,7 +13,7 @@ pub(crate) trait LlmClient: Send + Sync {
         &'a self,
         config: &'a LlmConfig,
         request: LlmChatRequest,
-        on_delta: &'a mut (dyn FnMut(String) -> AppResult<()> + Send),
+        on_delta: &'a mut (dyn FnMut(LlmStreamDelta) -> AppResult<()> + Send),
     ) -> Pin<Box<dyn Future<Output = AppResult<LlmChatResponse>> + Send + 'a>>;
     fn test_connection<'a>(
         &'a self,

@@ -4,8 +4,8 @@ use tauri::State;
 
 use crate::features::workspace::WorkspaceStateDto;
 use crate::features::workspace::WorkspaceStateService;
+use crate::platform::tasks::run_blocking;
 use crate::shared::error::AppResult;
-
 #[tauri::command]
 pub(crate) async fn load_workspace_state(
     state: State<'_, Arc<WorkspaceStateService>>,
@@ -22,5 +22,3 @@ pub(crate) async fn save_workspace_state(
     let service = Arc::clone(state.inner());
     run_blocking(move || service.save(&workspace.into())).await
 }
-
-use crate::platform::tasks::run_blocking;

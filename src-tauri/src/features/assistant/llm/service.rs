@@ -5,6 +5,7 @@ use crate::features::assistant::llm::LlmChatResponse;
 use crate::features::assistant::llm::LlmClient;
 use crate::features::assistant::llm::LlmConfig;
 use crate::features::assistant::llm::LlmConnectionStatus;
+use crate::features::assistant::llm::LlmStreamDelta;
 use crate::shared::error::AppError;
 use crate::shared::error::AppResult;
 
@@ -21,7 +22,7 @@ impl LlmService {
         &self,
         config: &LlmConfig,
         request: LlmChatRequest,
-        on_delta: &mut (dyn FnMut(String) -> AppResult<()> + Send),
+        on_delta: &mut (dyn FnMut(LlmStreamDelta) -> AppResult<()> + Send),
     ) -> AppResult<LlmChatResponse> {
         validate_config(config)?;
         validate_request(&request)?;

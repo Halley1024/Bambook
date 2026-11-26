@@ -60,7 +60,9 @@ export function MarkdownContent({ content, className }: { content: string; class
       continue;
     }
 
-    const paragraph: string[] = [];
+    // Always consume the current line, even when an incomplete block marker
+    // matches startsBlock but none of the complete block parsers above.
+    const paragraph: string[] = [lines[index++]];
     while (index < lines.length && lines[index].trim() && !startsBlock(lines[index])) paragraph.push(lines[index++]);
     blocks.push(<p key={`paragraph-${index}`}>{renderLines(paragraph)}</p>);
   }

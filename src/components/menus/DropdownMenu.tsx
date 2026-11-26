@@ -52,6 +52,7 @@ export function DropdownMenu({ label, icon: TriggerIcon, groups }: {
         className={`tool-button app-menu-trigger ${open ? "active" : ""}`}
         data-tooltip={`${label}：打开${label}菜单`}
         type="button"
+        aria-label={label}
         aria-haspopup="menu"
         aria-controls={menuId}
         aria-expanded={open}
