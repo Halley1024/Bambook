@@ -3,7 +3,6 @@ node_modules/
 dist/
 coverage/
 .vite/
-build/
 
 # Rust and Tauri outputs
 target/
